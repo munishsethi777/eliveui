@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<log4php:configuration xmlns:log4php="http://logging.apache.org/log4php/">
+
+  <!-- create Appender and then create corresponding logger -->
+  <appender name="myConsoleAppender"
+  class="LoggerAppenderConsole" />
+  <appender name="myFileAppender" class="LoggerAppenderFile">
+    <layout class="LoggerLayoutTTCC" />
+    <param name="file" value="logs/EzaeLog.log" />
+    <param name="maxFileSize" value="5MB" />
+  </appender>
+  <appender name="myDBAppender" class="LoggerAppenderPDO">
+    <layout class="LoggerLayoutTTCC" />
+    <param name="dsn"
+    value="mysql:host=localhost;dbname=envirotechlive" />
+    <param name="user" value="root" />
+    <param name="password" value="password" />
+    <param name="table" value="my_log" />
+  </appender>
+  <logger name="myFileLogger">
+    <appender_ref ref="myFileAppender" />
+  </logger>
+  <logger name="myDBLogger">
+    <appender_ref ref="myDBAppender" />
+  </logger>
+  <root>
+    <level value="DEBUG" />
+    <appender_ref ref="myConsoleAppender" />
+  </root>
+</log4php:configuration>

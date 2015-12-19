@@ -1,0 +1,5 @@
+07/28/11 01:55:08,434 [3440] DEBUG myLogger - My second message.
+07/28/11 01:55:08,437 [3440] INFO myLogger - My third message.
+07/28/11 01:55:08,438 [3440] WARN myLogger - My fourth message.
+07/28/11 01:55:08,440 [3440] ERROR myLogger - My fifth message.
+07/28/11 01:55:08,441 [3440] FATAL myLogger - My sixth message.
