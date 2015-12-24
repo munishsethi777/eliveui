@@ -26,6 +26,24 @@
         $str .= "</select>";
         return $str;
     }
+    public static function getUserLocationsDropDown($seq,$selectName,$onChangeMethod,$selectedValue,$noSelectionValue = null){
+        $LDS = LocationDataStore ::getInstance();
+        $locations = $LDS->FindLocationArrByUser($seq);
+        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";        
+        if(!empty($noSelectionValue)){
+            $str .= "<option value='0'>$noSelectionValue</option>";        
+        }else{
+            $str .= "<option value='0'>Select Location</option>";
+        }        
+        if($locations != null && $locations <> "" ){
+            foreach($locations as $location){
+                $select = $selectedValue == $location->getSeq() ? 'selected' : null;  
+                $str .= "<option value='" . $location->getSeq() . "'" . $select . ">" . $location->getLocationName() . "</option>";                               
+            } 
+        }
+        $str .= "</select>";
+        return $str;
+    }
      public static function getAllLocationsMultiDropDown($selectName,$onChangeMethod,$selectedValuel){
         $LDS = LocationDataStore ::getInstance();
         $locations = $LDS->FindAll();

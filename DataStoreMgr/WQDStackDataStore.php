@@ -114,6 +114,8 @@
             $sta = null;
 
             $val = $current["value"] == null ? $current[0] : $current["value"];
+            $val = str_replace(",","",$val);
+            
             $sta = $current["status"] == null ? $current[1] : $current["status"];
 
             if($val == ""){

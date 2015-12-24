@@ -1,9 +1,10 @@
-<?php
-  include('/home/envirote/public_html/app/log4php/Logger.php');
-  Logger::configure('/home/envirote/public_html/app/log4php/log4php.xml');                                        
-  $ConstantsArray = array('dbServerUrl' => '/home/envirote/public_html/app/',
-  'applicationURL'=>'http://www.envirotechlive.com/app/',
-  'rootURL'=>'http://www.envirotechlive.com/',
+<?php 
+  include('../log4php/Logger.php');
+  Logger::configure('../log4php/log4php.xml');                                         
+  $ConstantsArray = array('dbServerUrl' => 'D:/projects/eliveProject/app/',
+  'applicationURL'=>'http://localhost:8080/app',
+  'rootURL'=>'http://localhost:8080/',
+  'repositoryURL'=>'D:/projects/eliveProject/Repository/',
   'logger' => 'myDBLogger'
   );
   $PERMISSION_MANAGER = "Manager";

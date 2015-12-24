@@ -46,9 +46,10 @@
       if($files == null){
            ReminderMgr::reminderInvoker($folder);
            echo ("\n No Files found in ". $filespath);
+           $FDS->updateIsOnline($folder->getSeq(),0);
            continue;
       }
-
+      $FDS->updateIsOnline($folder->getSeq(),1);   
       //$FDS->updateLastParseDate($folder->getSeq());//UPDATE LAST PARSED ON DATE
       //latest file throw starts here
       $latestFile = $fileUtils->getLatestFileName($filespath);

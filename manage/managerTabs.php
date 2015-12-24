@@ -2,14 +2,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <? include("_jsAdminInclude.php");?>
+      <? include("../_InspiniaInclude.php");?> 
     </head>
     <body>
-    
-    <? include("leftButtons.php");?>
-    
-    <Div class="rightAdminPanel">
-        <? include("logOutButton.php"); ?>
+    <div id="wrapper">
+        <? include("leftButtons.php");?>
+    </div>
+    <div id="page-wrapper" class="gray-bg">  
     </div>
   </body>
 </html>

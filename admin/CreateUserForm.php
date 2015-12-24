@@ -151,8 +151,7 @@
                   <tr>
                     <td width="22%">Other Locations:</td>
                     <td width="78%">
-                        <b> <? echo DropDownUtils::getAllLocationsMultiDropDown("ol_DropDown","",$location->getSeq()) ?></b>
-                        
+                        <b> <? echo DropDownUtils::getAllLocationsMultiDropDown("ol_DropDown","",$user->getOtherLocationSeqs()) ?></b> 
                     </td>
                   </tr>
                  <tr>

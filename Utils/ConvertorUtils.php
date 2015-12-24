@@ -1,4 +1,7 @@
 <?php
+require_once('IConstants.inc');
+require_once($ConstantsArray['dbServerUrl'] ."/BusinessObjects/WQDData.php"); 
+
   class ConvertorUtils{
     public static $convertedUnitName = array(
                         'CO'=>"mg/m3",
@@ -101,6 +104,7 @@
             $jsonArry[0] = $jsondataDate;
             $jsonArry[1] = $josnDataValue; 
             return $jsonArry;                            
-      }  
+      } 
+      
   }
 ?>

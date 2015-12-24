@@ -1,9 +1,9 @@
 <?php                                        
-  include('/home/envirote/public_html/app/log4php/Logger.php');
-  Logger::configure('/home/envirote/public_html/app/log4php/log4php.xml');                                          
-  $ConstantsArray = array('dbServerUrl' => '/home/envirote/public_html/app/',
+  include('D:/projects/eliveProject/eliveui/log4php/Logger.php');
+  Logger::configure('D:/projects/eliveProject/eliveui/log4php/log4php.xml');                                          
+  $ConstantsArray = array('dbServerUrl' => 'D:/projects/eliveProject/eliveui/',
 
-  'applicationURL'=>'http://www.envirotechlive.com/app/',
+  'applicationURL'=>'http://localhost:8080/eliveui/',
    'logger' => 'myDBLogger'
 
   );

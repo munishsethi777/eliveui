@@ -95,7 +95,7 @@ class MailerUtils{
                 $message = array(
                     'html' => $message,
                     'text' => $message,
-                    'subject' => $subject,
+                    'subject' => "TEST : - " . $subject,
                     'from_email' => $from,
                     'from_name' => 'EnvirotechLive',
                     'to' => $toArr,

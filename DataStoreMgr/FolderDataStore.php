@@ -35,7 +35,7 @@ class FolderDataStore{
 
      private static $UPDATE_LAST_PARSED = "update folder set lastparsedon = now() where seq = :seq";
      private static $UPDATE_IS_ENABLED = "update folder set isenable=:isenable where seq = :seq";
-
+     private static $UPDATE_IS_ONLINE = "update folder set isonline = :isonline where seq = :folderseq";   
 
 
      public function __construct(){
@@ -301,7 +301,7 @@ class FolderDataStore{
            $folder->setVendor($row['vendor']);
            $folder->setMake($row['make']);
            $folder->setModel($row['model']);
-            $folder->setIsEnable($row['isenable']);
+           $folder->setIsEnable($row['isenable']);
            $folder->setIsVisible($row['isvisible']);
            $folder->setCertificationsSystem($row['certificationsystem']); 
            $m2mDs = M2MSynchronizerDataStore::getInstance();
@@ -309,6 +309,7 @@ class FolderDataStore{
            if(!empty($m2mSite)){
                $folder->setM2MCode($m2mSite->getSiteCode());
            }
+           $folder->setIsOnline($row["isonline"]);
            return $folder;
        }
        private static function getActualName($name){
@@ -319,6 +320,17 @@ class FolderDataStore{
           }
           return null;
        }
+       public function updateIsOnline($folderSeq,$isOnline){
+            $conn = self::$db->getConnection();
+            $stmt = $conn->prepare(self::$UPDATE_IS_ONLINE);
+            $stmt->bindValue(':isonline', $isOnline);
+            $stmt->bindValue(':folderseq', $folderSeq);
+            $stmt->execute();
+            $error = $stmt->errorInfo();
+            if($error[2] <> ""){
+                throw new RuntimeException($error[2]);
+            }
+     }
        public function folerExistWithLocation($locationseq , $folderName){
             $conn = self::$db->getConnection();
             $stmt = $conn->prepare(self::$FIND_BY_LOCATION);

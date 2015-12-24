@@ -376,7 +376,7 @@
             }
             return $UserObj;
           }
-        private function getLocationUsersLocationSeqs($userSeq){
+        private function getLocationUsersLocationSeqs($userSeq,$lSeq = null){
                 $conn = self::$db_New->getConnection();
                 $stmt = $conn->prepare(self::$FIND_LOCATION_USERS);
                 $stmt->bindValue(':userseq', $userSeq);
@@ -384,8 +384,11 @@
                 $locationSeqs = array();
                 while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $locationseq =  $row["locationseq"];
-                    array_push($locationSeqs,$locationseq);
-                }               
+                    if(!empty($lSeq) && $lSeq == $locationseq){  
+                    }else{
+                        array_push($locationSeqs,$locationseq);
+                    }
+                }
                 return $locationSeqs;    
           }
           public function getAllFolderSeqs($userSeq){
@@ -439,7 +442,7 @@
                 $user->setFolderSeq($folderSeq_);
                 $user->setLocationName($locationName_);
 				$user->setMobile($mobile_);
-				$otherLocationSeqs = $this->getLocationUsersLocationSeqs($user->getSeq());
+				$otherLocationSeqs = $this->getLocationUsersLocationSeqs($user->getSeq(),$locationSeq_);
                 $user->setOtherLocationSeqs($otherLocationSeqs);
                 return $user;
         }

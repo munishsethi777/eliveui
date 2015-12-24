@@ -2,10 +2,10 @@
                                         	
 
 
-  $ConstantsArray = array('dbServerUrl' => '/home/envirote/public_html/app/',
+  $ConstantsArray = array('dbServerUrl' => 'D:/projects/eliveProject/eliveui/',
 
-  'applicationURL'=>'http://www.envirotechlive.com/app/',
-  'rootURL'=>'http://www.envirotechlive.com/',
+  'applicationURL'=>'http://localhost:8080/eliveui/',
+  'rootURL'=>'http://localhost:8080/',
   'logger' => 'myDBLogger'
   );
 

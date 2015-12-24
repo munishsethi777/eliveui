@@ -108,7 +108,7 @@ try{
     }
   
     echo $tbl;
-    $ThatTime = strtotime("16:00:00");
+    $ThatTime = strtotime("15:30:00");
     $now = time();
     if ($now >= $ThatTime) {
         $smsSummaryLastSentOn = $CDS->getConfiguration($CDS::$smsSummaryLastSentOn);  

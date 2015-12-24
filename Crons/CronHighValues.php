@@ -51,7 +51,7 @@
      }
 	 $maxWQD = $arr[0]['wqdfiledataseq'];
 	 $avgValue =  $arr[0][1];
-	 echo (" - Average value found :". $avgValue . " till lastSeq :- " . $maxWQD);
+	 echo (" - Average value found :". $avgValue . " from seq ". $lastWQDSeq ." to lastSeq :- " . $maxWQD);
 	 if($maxWQD != 0){
 		$highValueRule->setLastRuleHitFileDataSeq($maxWQD);
 	 }

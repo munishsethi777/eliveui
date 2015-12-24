@@ -94,7 +94,6 @@ if ($_POST["formAction"] == "delete" ){
 					<td width="12%" class="ui-widget-header">Folder</td> 
                     <td width="5%" class="ui-widget-header">M2MStation Code</td>                   
                     <td width="10%" class="ui-widget-header">Last Synched</td>
-                    <td width="10%" class="ui-widget-header">Last Parsed</td>
                     <td width="10%" class="ui-widget-header">Last Reminder</td>
 					<td width="5%" class="ui-widget-header" align="center">Action</td>
 				  </tr>
@@ -140,7 +139,6 @@ if ($_POST["formAction"] == "delete" ){
                             "<td>" . $pathCol ."</td> 
                              <td>" . $folder->getM2MCode() ."</a></td>
                             <td>". $synchedOnStr ."</td>
-                            <td>". $parsedOnStr ."</td>
                             <td>". $remindedOnStr ."</td>
                                 
 							<td align='center'>

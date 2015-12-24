@@ -96,7 +96,7 @@ $Users = $UDS->FindAllManagers();
     </Div>
    <DIV id="showUsersDialog">
         <div id ="showUsersDialogData">
-        <div id="showFolders_loadingAjax"/>
+        <div id="showFolders_loadingAjax" style="display: none;"/>
            <img src='images/ajax.gif' />  
         </div>
         <Div class="msg"></div>  

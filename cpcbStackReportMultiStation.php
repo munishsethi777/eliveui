@@ -234,7 +234,7 @@ var options = Highcharts.setOptions(Highcharts.theme);
                     <input id="span" type="radio" name="valueTypeRadio" value="span" >
                     <label class="valueTypeRadioLabel" for="span">Span</label>-->
             </div>
-             <!--
+             
             <div style="width:100%;margin-top:6px;">
                 <label class="isExceedingLabel"><input type="checkbox" id="isExceedingCheckbox" />Exceeding</label>
                 <span id="exceedingType">
@@ -246,7 +246,7 @@ var options = Highcharts.setOptions(Highcharts.theme);
 
                     <input type="text" style="width:50px" id="exceedingValue"/>
                 </span>
-            </div> -->
+            </div>
             <div>
                 <!--<label class="isExceedingLabel"><input type="checkbox" id="isValidated" name="isValidated" />Only Validated</label>
                     -->

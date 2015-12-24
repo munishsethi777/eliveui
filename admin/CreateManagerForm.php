@@ -7,13 +7,14 @@
   
    $user = new User();
    $UDS = new UserDataStore();   
-       
+   $otherLocations = array();
    if($_POST["editSeq"] <> "" ){
         $UDS = new UserDataStore();
-        $user = $UDS->FindBySeq($_POST["editSeq"]);   
+        $user = $UDS->FindBySeq($_POST["editSeq"]);
+        $otherLocations = $user->getOtherLocationSeqs();   
    }  
    
-  if($_POST["submit"]<>""){
+  if(isset($_POST["call"]) && $_POST["call"] == "save"){
       $locationSeq = $_POST["locations"];
       $fullName = $_POST["fullName"];      
       $username = $_POST["username"];
@@ -22,7 +23,12 @@
       $emailId = $_POST["emailId"];
       $active = $_POST["active"];
       $seq = $_POST["seq"];
-      
+      $locations = $_POST["otherlocations"];
+      if(!empty($locations)){
+          $locations = explode(",",$locations);
+          $user->setOtherLocationSeqs($locations);
+          $otherLocations = $locations;
+      }
       $user->setLocationSeq($locationSeq);
       $user->setIsManager(true);
       $user->setUserName($username); 
@@ -116,7 +122,9 @@
         </tr>
       <tr>
         <td class="ui-widget-content">        
-            <form name="frm1" method="post" action="CreateManagerForm.php">
+            <form name="frm1" id="frm1" method="post" action="CreateManagerForm.php">
+                 <input type = "hidden" name="otherlocations" id="otherlocations"/>
+                 <input type = "hidden" name="call" id="call"/>        
                 <input type="hidden" name="seq" id="seq" value="<?php echo ($user->getSeq());?>" / >    
                 <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
                  <tr>
@@ -124,6 +132,12 @@
                     <td width="78%">
                         <? echo DropDownUtils::getAllLocationsDropDown("locations","",$user->getLocationSeq()) ?>
                         
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="22%">Other Locations:</td>
+                    <td width="78%">
+                        <b> <? echo DropDownUtils::getAllLocationsMultiDropDown("ol_DropDown","",$user->getOtherLocationSeqs()) ?></b> 
                     </td>
                   </tr>
                  <tr>
@@ -163,7 +177,7 @@
                     <td>&nbsp;</td>
                     <td>
                        
-                         <input type="submit" name="submit" value="Save" checked> 
+                        <input type="button" onclick="submitForm()" name="savebtn" value="Save">
                         <input type="reset" name="Reset" value="Reset">
                     
                     </td>
@@ -185,3 +199,22 @@
 
     </body>
 </html>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".chosen-select").chosen({width:"63%"});
+        var values = "<?echo implode(",",$otherLocations)?>";
+        if(values.length > 0){
+            values = values.split(",");
+            $('.chosen-select').val(values).trigger("chosen:updated");
+        }
+    });
+    function submitForm(){
+        var vals = [];
+        $( '#ol_DropDown :selected' ).each( function( i, selected ) {
+            vals[i] = $( selected ).val();
+        });
+        $("#otherlocations").val(vals);
+        $("#call").val("save");
+        $("#frm1").submit();
+    }
+</script>

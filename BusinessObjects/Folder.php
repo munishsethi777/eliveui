@@ -3,7 +3,7 @@
 
       private $seq,$folderName,$location,$locationFolder,$details,$locationSeq,$actualName,$email;
       private $lastSynchedOn,$lastParsedOn,$lastRemindedOn,$stationType,$category, $latitude, $longitude,$zicode,$isvisible, $isenable;
-      private $industryCode, $industryName, $address, $city, $state, $stationName, $model, $mobile, $vendor,$make,$certificationsystem, $deviceid,$m2mCode; 
+      private $industryCode, $industryName, $address, $city, $state, $stationName, $model, $mobile, $vendor,$make,$certificationsystem, $deviceid,$m2mCode,$isOnline; 
 
       public function setSeq($seq_){
         $this->seq = $seq_;
@@ -216,6 +216,12 @@
       public function getM2MCode(){
         return $this->m2mCode;
       }
+       public function setIsOnline($isOnline_){
+         $this->isOnline = $isOnline_;
+         }
+         public function getIsOnline(){
+             return $this->isOnline;
+         }
       
       
   }

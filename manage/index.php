@@ -1,12 +1,9 @@
-<?php
-    
-    require_once('IConstants.inc'); 
-    require($ConstantsArray['dbServerUrl'] . "DataStoreMgr/UserDataStore.php");
-    
+<?php  
+require_once('IConstants.inc'); 
+require($ConstantsArray['dbServerUrl'] . "DataStoreMgr/UserDataStore.php");
 $div = "";
 if($_POST["submit"]<>"")
 {
-    
     $username = $_POST["username"];
     $password = $_POST["password"];
     $password= SecurityUtil::Encode($password);
@@ -35,82 +32,43 @@ if($_POST["submit"]<>"")
                        </div></div>" ;     
     }
 }
+
 ?>
-
-
- 
+  
 <!DOCTYPE html>
 <html>
     <head>
         <link type="text/css" href="css/cupertino/jquery-ui-1.8.14.custom.css" rel="stylesheet" />
-        <link type="text/css" href="css/custom.css" rel="stylesheet" />    
-    </head>      
-    <table align="center" width="40%" border="0">
-       <tr>       
-        <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-       </tr>  
-      <tr>
-        <td class="ui-widget-header" style="padding:10px 10px 10px 10px;"> Manager's Login </td>
-        </tr>
-      <tr>
-        <td class="ui-widget-content">
-            <form name="frm1" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">        
-                <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                   <tr>
-                    <td width="22%">Username :</td>
-                    <td width="78%"><input name="username" type="username" size="30">
-                      &nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td width="22%">Password :</td>
-                    <td width="78%"><input name="password" type="password" size="30">
-                      &nbsp;</td>
-                  </tr>
-                  
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td><input type="submit" name="submit" value=" Login " />
-                         
-                        <input type="reset" name="Reset" value="Reset">
-                        
-                    
-                    </td></tr>
-                     <tr>
-                    <td>&nbsp;</td>
-                    <!--td><a href="forgotPassword.php">Forgot Password</a>   </td-->
-                    
-                    
-                  </tr>
-                </table>
-              </form> 
-         </td>
-        </tr>
-        
-    </table>
-
-    
-    
-    
-    
-    </Div>
-     
-       <script language="javascript">
-    function submitform()
-    {
-        if(document.frm1.adminPassword.value=="")
-        {
-            alert("enter the password");
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-
-    }
-</script>
-
+        <link type="text/css" href="css/custom.css" rel="stylesheet" /> 
+        <? include("../_InspiniaInclude.php");?>
+    </head> 
+    <body class="gray-bg">
+        <div class="middle-box text-center loginscreen animated fadeInDown">
+            <div>
+                <div>
+                    <h2 class="logo-name"><img src="images/logo.png" alt=""></h2>
+                </div>
+                <h3>Welcome to Envirotech Live</h3>
+                <p>Manger Login in. To see it in action.</p>
+                <form class="m-t" method="post" role="form" name="frm1" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <input type="hidden" value="submit" name="submit">
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="Username" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password" placeholder="Password" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+                <a href="#"><small>Forgot password?</small></a>
+            </form>   
+           </div>
+        </div> 
     </body>
 </html>
+<script language="javascript">
+    <?if(!empty($div)){?>
+        showNotification("Invalid Password")      
+    <?}?>
+</script>
 
 

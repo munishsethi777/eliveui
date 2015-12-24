@@ -157,6 +157,22 @@ class LocationDataStore{
         }
        return $locationArray;
     }
+    
+     private static $FIND_LOCATIONS_USER = "select l.* from locationusers lu inner join location l on lu.locationseq = l.seq where userseq = :userseq";
+     public function FindLocationArrByUser($userSeq){
+        $conn = self::$db->getConnection();
+        $stmt = $conn->prepare(self::$FIND_LOCATIONS_USER);
+        $stmt->bindValue(':userseq', $userSeq);
+        $stmt->execute();
+        $error = $stmt->errorInfo();
+        $locationArray = Array();
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $location = new Location();
+            $location =  self::populateObject($row);
+            $locationArray[$location->getSeq()] = $location;
+        }
+       return $locationArray;
+    }
 
 }
 ?>
