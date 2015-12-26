@@ -1,0 +1,5 @@
+[04-Nov-2015 16:52:58 Asia/Kolkata] PHP Fatal error:  Call to undefined method Folder::setIsEnable() in /home/envirote/public_html/app/DataStoreMgr/FolderDataStore.php on line 236
+[04-Nov-2015 16:53:09 Asia/Kolkata] PHP Fatal error:  Call to undefined method Folder::setIsEnable() in /home/envirote/public_html/app/DataStoreMgr/FolderDataStore.php on line 236
+[04-Nov-2015 16:56:48 Asia/Kolkata] PHP Warning:  scandir(/home/envirote/public_html/Repository/jspl/north_side_plant): failed to open dir: No such file or directory in /home/envirote/public_html/app/Utils/FileSystemUtils.php on line 41
+[04-Nov-2015 16:56:48 Asia/Kolkata] PHP Warning:  scandir(): (errno 2): No such file or directory in /home/envirote/public_html/app/Utils/FileSystemUtils.php on line 41
+[04-Nov-2015 16:56:48 Asia/Kolkata] PHP Warning:  Invalid argument supplied for foreach() in /home/envirote/public_html/app/Utils/FileSystemUtils.php on line 41

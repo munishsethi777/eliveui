@@ -1,0 +1,86 @@
+<?php
+  
+  require_once('../IConstants.inc');
+  require_once($ConstantsArray['dbServerUrl'] . "BusinessObjects//Folder.php");
+  require_once($ConstantsArray['dbServerUrl'] . "BusinessObjects//ChannelConfiguration.php");
+  
+  class DropDownUtils{
+    
+      public static function getAllLocationsDropDown($selectName,$onChangeMethod,$selectedValue){
+        $LDS = LocationDataStore ::getInstance();
+        $locations = $LDS->FindAll();
+        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str .= "<option value='0'>Select Location</option>";
+        
+        if($locations != null && $locations <> "" ){
+            foreach($locations as $location){
+                $select = $selectedValue == $location->getSeq() ? 'selected' : null;  
+                $str .= "<option value='" . $location->getSeq() . "'" . $select . ">" . $location->getLocationName() . "</option>";                               
+            } 
+        }
+        $str .= "</select>";
+        return $str;
+    }
+    public static function getStationTypeDropDown($selectName,$selectedValue,$onChangeMethod = ""){
+        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $aqmsSelect = $selectedValue == "amqs" ? 'selected' : null;
+        $stackSelect = $selectedValue == "stack" ? 'selected' : null;
+        $efSelect = $selectedValue == "effluent" ? 'selected' : null;
+        $str .= "<option value='amqs' $aqmsSelect>AQMS</option>";
+        $str .= "<option value='stack' $stackSelect>CEMS</option>";
+        $str .= "<option value='effluent' $efSelect>EFFLUENT</option>";
+        $str .= "</select>";
+        return $str;
+    }
+     public static function getFoldersDropDown($folders,$selectName,$onChangeMethod,$selectedValue){
+        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str .= "<option value='0'>Select a folder</option>";
+        if($folders != null && $folders <> "" ){
+            foreach($folders as $folder){
+                $folderObj = new Folder();
+                $folderObj = $folder;
+                $select = $selectedValue == $folderObj->getSeq() ? 'selected' : null;  
+                $str .= "<option value='" . $folderObj->getSeq() . "'" . $select . ">" . $folderObj->getFolderName() . "</option>";                               
+            } 
+        }
+        $str .= "</select>";
+        return $str;
+    }
+    public static function getFoldersDropDownWithStationName($folders,$selectName,$onChangeMethod,$selectedValue){
+        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str .= "<option value='0'>Select a folder</option>";
+        if($folders != null && $folders <> "" ){
+            foreach($folders as $folder){
+                $folderObj = new Folder();
+                $folderObj = $folder;
+                $name = $folder->getStationName();
+                if(empty($name)){
+                    $name =  $folderObj->getFolderName();   
+                }
+                $select = $selectedValue == $folderObj->getSeq() ? 'selected' : null;  
+                $str .= "<option value='" . $folderObj->getSeq() . "'" . $select . ">" . $name . "</option>";                               
+            } 
+        }
+        $str .= "</select>";
+        return $str;
+    }
+    public static function getChannelsDropDown($channels,$selectName,$onChangeMethod,$selectedValue){
+        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str .= "<option value='0'>Select a ChanelConfig</option>";
+        if($channels != null && $channels <> "" ){
+            foreach($channels as $channel){
+                $channelObj = new ChannelConfiguration();
+                $channelObj = $channel;
+                $select = $selectedValue == $channelObj->getChannelNumber() ? 'selected' : null;
+                $chNo = $channelObj->getChannelNumber();
+                $chName = $channelObj->getChannelName();
+                $str .= "<option value='" . $chNo . "'" . $select . ">" . $chName . "</option>";                               
+            } 
+        }
+        $str .= "</select>";
+        return $str;
+    }    
+  
+  
+  }
+?>
