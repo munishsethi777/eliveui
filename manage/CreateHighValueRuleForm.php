@@ -113,7 +113,7 @@
                     </tr>
                   <tr>
                     <td class="ui-widget-content">        
-                        <form name="frm1" method="post" action="CreateHighValueRuleForm.php">
+                        <form name="frm1" method="post" action="createHighValueRuleForm.php">
                             <input type="hidden" name="seq" id="seq" value="<?php echo ($highValueRule->getSeq());?>" / >
                             <input type="hidden" name="lastRuleHitFileDataSeq" id="seq" value="<?php echo ($highValueRule->getLastRuleHitFileDataSeq());?>" / >
                              <table width="100%" border="0" style="padding:10px 10px 10px 10px;">

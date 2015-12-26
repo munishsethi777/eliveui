@@ -61,47 +61,42 @@ if($_POST["submit"]<>"")
         <?include("../_InspiniaInclude.php");?>
     </head>
     <body>
-    <Div class="wrapper"> 
+       <div class="wrapper">
         <? include("leftButtons.php");?>
-        <Div id="page-wrapper" class="gray-bg">
-            <? include("logOutButton.php"); ?>
-            <table width="80%" border="0">
-              <tr>
-                <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-               </tr>
-              <tr>
-
-                <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Change Email Id</td>
-                </tr>
-              <tr>
-                <td class="ui-widget-content">
-                    <form name="frm1" method="post" action="changeEmailId.php">
-                        <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-
-                          <tr>
-                            <td width="22%">Email Id</td>
-                            <td width="78%"><input name="emailId" type="text" size="50" value="<?php echo($email);?>" >
-                              &nbsp;</td>
-                          </tr>
-                           <tr>
-                            <td width="22%">Confirm Email Id</td>
-                            <td width="78%"><input name="conEmailId" type="text" size="50" value="<?php echo($conEmail);?>" >
-                              &nbsp;</td>
-                          </tr>
-                           <tr>
-                            <td>&nbsp;</td>
-                            <td>
-                                 <input type="submit" name="submit" value="Save">
-                                <input type="reset" name="Reset" value="Reset">
-
-                            </td>
-                          </tr>
-                        </table>
-                      </form>
-                 </td>
-                </tr>
-
-            </table>
-        </Div>
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <?php echo($div)?>  
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Change Email Id</h5>
+                            </div>  
+                            <div class="ibox-content">
+                                 <form name="frm1" method="post" action="changeEmailId.php" class="form-horizontal">
+                                    <input type="hidden" name="submit" value="submit"/>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Email Id</label>
+                                        <div class="col-lg-10">
+                                            <input type="email" name="emailId"  value="<?php echo($email);?>" placeholder="Email" required="required" class="form-control"> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Confirm Email Id</label>
+                                        <div class="col-lg-10">
+                                            <input type="email" name="conEmailId" value="<?php echo($conEmail);?>" placeholder="Confirm" required="required" class="form-control"> 
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit">Submit</button>
+                                        </div>
+                                    </div>  
+                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
     </body>
 </html>

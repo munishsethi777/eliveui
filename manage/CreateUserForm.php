@@ -177,7 +177,9 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-lg-offset-2 col-lg-10">
-                                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit">Create</button>
+                                                <button class="btn btn-primary" type="submit">Create</button>
+                                                <button class="btn btn-white" type="submit" onclick="cancel()">Cancel</button>
+                                                
                                                 <!--button class="btn btn-primary ladda-button" data-style="expand-right" id="saveButton" type="button">
                                                     <span class="ladda-label">Create</span>
                                                 </button-->
@@ -194,3 +196,8 @@
 
     </body>
 </html>
+<script type="text/javascript">
+    function cancel(){
+        location.href = "showUsers.php";
+    }
+</script>

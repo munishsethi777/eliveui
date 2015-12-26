@@ -81,49 +81,47 @@ if($_POST["submit"]<>"")
     <body>
         <div class="wrapper">
             <? include("leftButtons.php");?>
-            <div id="page-wrapper" class="gray-bg">
-                <table width="80%" border="0">
-                   <tr>
-                    <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-                   </tr>
-                  <tr>
-                  <tr>
-                    <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Change Password </td>
-                    </tr>
-                  <tr>
-                    <td class="ui-widget-content">
-                        <form name="frm1" method="post" action="ChangePassword.php">
-                            <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                              <tr>
-                                <td width="22%">Earlier Password :</td>
-                                <td width="78%"><input name="earlierPassword" type="password" size="50">
-                                  &nbsp;</td>
-                              </tr>
-                              <tr>
-                                <td>New Password :</td>
-                                <td><input name="newPassword" type="password" size="50">
-                                  &nbsp;</td>
-                              </tr>
-                               <tr>
-                                <td>Confirm New Password :</td>
-                                <td><input name="confirmNewPassword" type="password" size="50">
-                                  &nbsp;</td>
-                              </tr>
-                              <tr>
-                                <td>&nbsp;</td>
-                                <td>
-                                     <input type="submit" name="submit" value="submit">
-                                    <input type="reset" name="Reset" value="Reset">
-
-                                </td>
-                              </tr>
-                            </table>
-                          </form>
-                     </td>
-                    </tr>
-
-                </table>
-            </div>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                     <?php echo($div)?>  
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Change Password</h5>
+                                </div>  
+                                <div class="ibox-content">
+                                     <form name="frm1" method="post" action="changePassword.php" class="form-horizontal">
+                                        <input type="hidden" name="submit" value="submit"/>
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">Earlier Password</label>
+                                            <div class="col-lg-10">
+                                                <input type="password" name="earlierPassword" placeholder="Earlier Password" required="required" class="form-control"> 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">Earlier Password</label>
+                                            <div class="col-lg-10">
+                                                <input type="password" name="newPassword" placeholder="New Password" required="required" class="form-control"> 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">Confirm Password</label>
+                                            <div class="col-lg-10">
+                                                <input type="password" name="confirmNewPassword" placeholder="Confirm Password" required="required" class="form-control"> 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button class="btn btn-sm btn-primary m-t-n-xs" type="submit">Submit</button>
+                                            </div>
+                                        </div>
+                                     </form> 
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <? include("footer.php"); ?>
         </div>
     </body>
 </html>
