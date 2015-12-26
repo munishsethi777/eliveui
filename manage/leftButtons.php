@@ -98,7 +98,7 @@
                 <li class="<?=$mainSettings?>">
                     <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">Settings</span>  <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li class="<?=$changePassword?>"><a href="ChangePassword.php">Change Password</a></li>
+                        <li class="<?=$changePassword?>"><a href="changePassword.php">Change Password</a></li>
                         <li class="<?=$changeEmail?>"><a href="changeEmailId.php">Change Email</a></li>
                     </ul>
                 </li>
