@@ -21,7 +21,7 @@
                     </div>
                 </li>
                 <li class="active">
-                    <a href="index.html"><i class="fa fa-users"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
+                    <a href="managerTabs.php"><i class="fa fa-users"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Users</span><span class="fa arrow"></span></a>
@@ -51,7 +51,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">Meta Information</span><<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">Meta Information</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a href="editMeta.php">Edit Meta</a></li>
                         <li><a href="editParameter.php">Edit Parameters</a></li>

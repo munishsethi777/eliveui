@@ -150,104 +150,92 @@ function checkChNoUniqueValidation(){
     return true;
 }
 ?>
-
-
-
 <html>
     <head>
-    <? include("_jsAdminInclude.php");?>
-    
+        <? include("_jsAdminInclude.php");?>
+        <?include("../_InspiniaInclude.php");?> 
     </head>
     <body>
-
-    <? include("leftButtons.php");?>
-
-    <Div class="rightAdminPanel">
-        <? include("logOutButton.php"); ?>
-
-
-    <table width="80%" border="0">
-      <tr>
-        <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-       </tr>
-      <tr>
-      
-        <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Edit Parameters</td>
-        </tr>
-         <tr>
-        <td class="ui-widget-content">
-            <form name="frm1" method="post" action="editParameter.php">
-                <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-
-                  <tr>
-                    <td width="22%">Select Folder</td>
-                    <td width="78%">                    
-                        <? echo DropDownUtils::getFoldersDropDownWithStationName($folders,"F_DropDown","setLocation()",$selSeq) ?>
-                          <input type="submit" name="submit" value="Edit">
-                      &nbsp;</td>
-                  </tr>
-                  </table>
-              </form>
-         </td>
-        </tr>
-      <tr>
-        <td class="ui-widget-content">
-            <form name="chform" id="chform" method="post" action="editParameter.php">
-                <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
-                <input type="hidden" name="delSeq" id = "delSeq">
-                <input type="hidden" name="call" id="call" >
-                <table id="chTable" width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                 <tr>
-                   <td><strong>Channel No</strong></td>
-                   <td><strong>Channel Name</strong></td>
-                   <td><strong>Channel Unit</strong></td>
-                   <td><strong>Sub Station</strong></td>
-                   <td><strong>Prescribed Limit</strong></td>
-                 </tr>
-                 <?$index = 0;?>
-                  
-                    <?foreach($channlConfigs as $ch){$index++;?>
-                     <input name="chseq[]" type="hidden" value="<?echo $ch->getSeq()?>">       
-                     <tr id="row<?echo $index?>">
-                         <td><input name="chno<?echo $index?>" type="text" size="5" value="<?echo $ch->getChannelNumber()?>" ></td>
-                         <td><input name="chName<?echo $index?>" type="text" size="20" value="<?echo $ch->getChannelName()?>" ></td>
-                         <td><input name="chUnit<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelUnit()?>" ></td>
-                         <td><input name="substation<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelStation()?>" ></td>
-                          <td><input name="prescribedlimit<?echo $index?>" type="text" size="15" value="<?echo $ch->getPrescribedLimit()?>" ></td>
-                         <?if(!$isdataExist){?>
-                          <td><a href='javascript:Delete(<?echo $ch->getSeq()?>)' title='Delete'>
-                            <img src='images/delete.png'  border='0'/> 
-                          </a></td>
-                          <?}?>
-                     </tr>
-                 <?}?>
-                 </table>
-                 <table style="padding:10px 10px 10px 10px;">
-                   <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        <input type="submit" name="submit" value="Update">
-                        <input type="reset" name="Reset" value="Reset">
-                        <?if(!$isdataExist){?>
-                            <input style="float: right;" onclick="javascript:addRows()" type="button" name="addRow" value="Add">    
-                        <?}?>
-                    </td>
-                  </tr>
-                </table>
-              </form>
-         </td>
-        </tr>
-
-    </table>
+    <div class="wrapper">
+        <? include("leftButtons.php");?>
+        <div id="page-wrapper" class="gray-bg"> 
+       <? include("logOutButton.php"); ?>
 
 
-
-
-
-
+        <table width="80%" border="0">
+          <tr>
+            <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
+          </tr>
+          <tr>
+            <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Edit Parameters</td>
+          </tr>
+          <tr>
+            <td class="ui-widget-content">
+                <form name="frm1" method="post" action="editParameter.php">
+                    <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
+                      <tr>
+                        <td width="22%">Select Folder</td>
+                        <td width="78%">                    
+                            <? echo DropDownUtils::getFoldersDropDownWithStationName($folders,"F_DropDown","setLocation()",$selSeq) ?>
+                              <input type="submit" name="submit" value="Edit">
+                          &nbsp;
+                        </td>
+                      </tr>
+                    </table>
+                </form>
+             </td>
+            </tr>
+          <tr>
+            <td class="ui-widget-content">
+                <form name="chform" id="chform" method="post" action="editParameter.php">
+                    <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
+                    <input type="hidden" name="delSeq" id = "delSeq">
+                    <input type="hidden" name="call" id="call" >
+                    <table id="chTable" width="100%" border="0" style="padding:10px 10px 10px 10px;">
+                         <tr>
+                           <td><strong>Channel No</strong></td>
+                           <td><strong>Channel Name</strong></td>
+                           <td><strong>Channel Unit</strong></td>
+                           <td><strong>Sub Station</strong></td>
+                           <td><strong>Prescribed Limit</strong></td>
+                         </tr>
+                         <?$index = 0;?>
+                      
+                         <?foreach($channlConfigs as $ch){
+                             $index++;?>
+                             <input name="chseq[]" type="hidden" value="<?echo $ch->getSeq()?>">       
+                             <tr id="row<?echo $index?>">
+                                 <td><input name="chno<?echo $index?>" type="text" size="5" value="<?echo $ch->getChannelNumber()?>" ></td>
+                                 <td><input name="chName<?echo $index?>" type="text" size="20" value="<?echo $ch->getChannelName()?>" ></td>
+                                 <td><input name="chUnit<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelUnit()?>" ></td>
+                                 <td><input name="substation<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelStation()?>" ></td>
+                                  <td><input name="prescribedlimit<?echo $index?>" type="text" size="15" value="<?echo $ch->getPrescribedLimit()?>" ></td>
+                                 <?if(!$isdataExist){?>
+                                  <td><a href='javascript:Delete(<?echo $ch->getSeq()?>)' title='Delete'>
+                                    <img src='images/delete.png'  border='0'/> 
+                                  </a></td>
+                                  <?}?>
+                             </tr>
+                         <?}?>
+                     </table>
+                     <table style="padding:10px 10px 10px 10px;">
+                       <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <input type="submit" name="submit" value="Update">
+                                <input type="reset" name="Reset" value="Reset">
+                                <?if(!$isdataExist){?>
+                                    <input style="float: right;" onclick="javascript:addRows()" type="button" name="addRow" value="Add">    
+                                <?}?>
+                            </td>
+                      </tr>
+                    </table> 
+                </form>
+             </td>
+            </tr>
+        </table>
+        </div>
     </Div>
-
-
     </body>
 </html>
  <script language="javascript">

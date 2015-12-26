@@ -5,7 +5,7 @@
 <link type="text/css" href="../admin/css/chosen/chosen.css" rel="stylesheet" />
 <link rel="stylesheet" href="../jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="../jqwidgets/styles/jqx.energyblue.css" type="text/css" />
-<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> 
 <script type="text/javascript" src="js/jquery-ui.custom.min.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript" src="../admin/js/chosen/chosen.jquery.js"></script>

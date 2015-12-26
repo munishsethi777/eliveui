@@ -57,61 +57,51 @@ if($_POST["submit"]<>"")
 <!DOCTYPE html>
 <html>
     <head>
-    <? include("_jsAdminInclude.php");?>
+        <?include("_jsAdminInclude.php");?>
+        <?include("../_InspiniaInclude.php");?>
     </head>
     <body>
+    <Div class="wrapper"> 
+        <? include("leftButtons.php");?>
+        <Div id="page-wrapper" class="gray-bg">
+            <? include("logOutButton.php"); ?>
+            <table width="80%" border="0">
+              <tr>
+                <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
+               </tr>
+              <tr>
 
-    <? include("leftButtons.php");?>
+                <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Change Email Id</td>
+                </tr>
+              <tr>
+                <td class="ui-widget-content">
+                    <form name="frm1" method="post" action="changeEmailId.php">
+                        <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
 
-    <Div class="rightAdminPanel">
-        <? include("logOutButton.php"); ?>
+                          <tr>
+                            <td width="22%">Email Id</td>
+                            <td width="78%"><input name="emailId" type="text" size="50" value="<?php echo($email);?>" >
+                              &nbsp;</td>
+                          </tr>
+                           <tr>
+                            <td width="22%">Confirm Email Id</td>
+                            <td width="78%"><input name="conEmailId" type="text" size="50" value="<?php echo($conEmail);?>" >
+                              &nbsp;</td>
+                          </tr>
+                           <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                 <input type="submit" name="submit" value="Save">
+                                <input type="reset" name="Reset" value="Reset">
 
+                            </td>
+                          </tr>
+                        </table>
+                      </form>
+                 </td>
+                </tr>
 
-    <table width="80%" border="0">
-      <tr>
-        <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-       </tr>
-      <tr>
-
-        <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Change Email Id</td>
-        </tr>
-      <tr>
-        <td class="ui-widget-content">
-            <form name="frm1" method="post" action="changeEmailId.php">
-                <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-
-                  <tr>
-                    <td width="22%">Email Id</td>
-                    <td width="78%"><input name="emailId" type="text" size="50" value="<?php echo($email);?>" >
-                      &nbsp;</td>
-                  </tr>
-                   <tr>
-                    <td width="22%">Confirm Email Id</td>
-                    <td width="78%"><input name="conEmailId" type="text" size="50" value="<?php echo($conEmail);?>" >
-                      &nbsp;</td>
-                  </tr>
-                   <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                         <input type="submit" name="submit" value="Save">
-                        <input type="reset" name="Reset" value="Reset">
-
-                    </td>
-                  </tr>
-                </table>
-              </form>
-         </td>
-        </tr>
-
-    </table>
-
-
-
-
-
-    </Div>
-
-
-
+            </table>
+        </Div>
     </body>
 </html>
