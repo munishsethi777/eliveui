@@ -72,79 +72,69 @@ if($_POST["submit"]<>"")
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html>
     <head>
-    <? include("_jsAdminInclude.php");?>
+        <? include("_jsAdminInclude.php");?>
+        <?include("../_InspiniaInclude.php");?> 
     </head>
     <body>
-
-    <? include("leftButtons.php");?>
-
-    <Div class="rightAdminPanel">
-        <? include("logOutButton.php"); ?>
-
-
-    <table width="80%" border="0">
-       <tr>
-        <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-       </tr>
-      <tr>
-      <tr>
-        <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Change Password </td>
-        </tr>
-      <tr>
-        <td class="ui-widget-content">
-            <form name="frm1" method="post" action="ChangePassword.php">
-                <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                  <tr>
-                    <td width="22%">Earlier Password :</td>
-                    <td width="78%"><input name="earlierPassword" type="password" size="50">
-                      &nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>New Password :</td>
-                    <td><input name="newPassword" type="password" size="50">
-                      &nbsp;</td>
-                  </tr>
+        <div class="wrapper">
+            <? include("leftButtons.php");?>
+            <div id="page-wrapper" class="gray-bg">
+                <table width="80%" border="0">
                    <tr>
-                    <td>Confirm New Password :</td>
-                    <td><input name="confirmNewPassword" type="password" size="50">
-                      &nbsp;</td>
-                  </tr>
+                    <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
+                   </tr>
                   <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                         <input type="submit" name="submit" value="submit">
-                        <input type="reset" name="Reset" value="Reset">
+                  <tr>
+                    <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Change Password </td>
+                    </tr>
+                  <tr>
+                    <td class="ui-widget-content">
+                        <form name="frm1" method="post" action="ChangePassword.php">
+                            <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
+                              <tr>
+                                <td width="22%">Earlier Password :</td>
+                                <td width="78%"><input name="earlierPassword" type="password" size="50">
+                                  &nbsp;</td>
+                              </tr>
+                              <tr>
+                                <td>New Password :</td>
+                                <td><input name="newPassword" type="password" size="50">
+                                  &nbsp;</td>
+                              </tr>
+                               <tr>
+                                <td>Confirm New Password :</td>
+                                <td><input name="confirmNewPassword" type="password" size="50">
+                                  &nbsp;</td>
+                              </tr>
+                              <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                     <input type="submit" name="submit" value="submit">
+                                    <input type="reset" name="Reset" value="Reset">
 
-                    </td>
-                  </tr>
+                                </td>
+                              </tr>
+                            </table>
+                          </form>
+                     </td>
+                    </tr>
+
                 </table>
-              </form>
-         </td>
-        </tr>
-
-    </table>
-
-
-
-
-
-    </Div>
-
-
-      <script language="javascript">
-function submitform()
-{
+            </div>
+        </div>
+    </body>
+</html>
+<script language="javascript">
+    function submitform()
+    {
     if(document.frm1.earlierPassword.value=="")
     {
         alert("enter your old password");
         return false;
     }
-
     if(document.frm1.newPassword.value=="")
     {
         alert("enter new password");
@@ -155,14 +145,9 @@ function submitform()
         alert("enter confirm password");
         return false;
     }
-
     else
     {
         return true;
     }
-
-
 }
 </script>
-    </body>
-</html>
