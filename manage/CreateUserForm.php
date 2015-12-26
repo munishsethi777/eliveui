@@ -4,12 +4,14 @@
   require_once($ConstantsArray['dbServerUrl'] . "FormValidator//validator.php");
   require_once($ConstantsArray['dbServerUrl'] . "Utils/DropDownUtils.php");
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//LocationDataStore.php");
-   $user = new User();
-   $UDS = new UserDataStore();   
-   $otherLocationSeqs = "";    
-   if($_POST["editSeq"] <> "" ){
+  $user = new User();
+  $UDS = new UserDataStore();   
+  $otherLocationSeqs = ""; 
+  $locationSeq = "";   
+  if($_POST["editSeq"] <> "" ){
         $UDS = new UserDataStore();
         $user = $UDS->FindBySeq($_POST["editSeq"]);
+        $locationSeq = $user->getLocationSeq();
         $otherLocation = $user->getOtherLocationSeqs();
         if(!empty($otherLocation)){
            $otherLocationSeqs = implode(",",$otherLocation);    
@@ -17,7 +19,7 @@
    }  
    
   if($_POST["submit"]<>""){
-      $locationSeq = $_POST["locSeq"];
+     // $locationSeq = $_POST["locSeq"];
       $fullName = $_POST["fullName"];      
       $username = $_POST["username"];
       $Password = $_POST["password"];
@@ -25,6 +27,7 @@
       $emailId = $_POST["emailId"];
       $active = $_POST["active"];
       $seq = $_POST["seq"];
+      $locationSeq = $_POST["l_DropDown"];
       $otherLocations = $_POST["otherLocationSeqs"];
       
       $user->setLocationSeq($locationSeq);
@@ -46,7 +49,7 @@
     $div = "";
     $messageText = validator::validateform("User Name",$username,56,false);
     if($locationSeq == 0){
-        $messageText .= "- Location is Required<br>";    
+        $messageText .= "- Please Select Location<br>";    
     }
     
     $messageText .= validator::validateform("Password",$Password,56,false); 
@@ -107,14 +110,14 @@
         <div id="wrapper">
            
             <? include("leftButtons.php");
-            
+            $seq = $managerSession['seq'];
             $LDS = LocationDataStore::getInstance();
             $location = $LDS->FindBySeq($managerSession['locSeq']); // finding location from the current sessio
             
             ?>
             <div id="page-wrapper" class="gray-bg">
-                <?php echo($div)?>
                 <div class="wrapper wrapper-content animated fadeInRight">
+                <?php echo($div)?>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
@@ -122,37 +125,40 @@
                                     <h5>User Form</h5>
                                 </div>  
                                 <div class="ibox-content">
-                                    <p>Location : <strong><?echo $location->getLocationName()?></strong></p>
                                     <form method="post" role="form" name="frm1" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal">
                                         <input type="hidden" name="submit" value="submit"> 
                                         <input type="hidden" name="seq" id="seq" value="<?php echo ($user->getSeq());?>">
                                         <input type="hidden" name="seq" id="seq" value="<?php echo ($user->getSeq());?>" / >
                                         <input type="hidden" name="otherLocationSeqs" id="otherLocationSeqs" value="<?php echo ($otherLocationSeqs);?>" / >
                                         <input type="hidden" name="locSeq" id="locSeq" value="<?php echo ($location->getSeq());?>" / >  
-                                        
-                                        
+                                         <div class="form-group">
+                                            <label class="col-sm-2 control-label">Location</label>
+                                            <div class="col-sm-10">
+                                                <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","",$locationSeq) ?>  
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="col-lg-2 control-label">Full Name</label>
                                             <div class="col-lg-10">
-                                                <input type="text" name="fullName" placeholder="Full Name" value="<?php echo($user->getFullName())?>" class="form-control"> 
+                                                <input type="text" name="fullName" placeholder="Full Name" required="required" value="<?php echo($user->getFullName())?>" class="form-control"> 
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-2 control-label">User Name</label>
                                             <div class="col-lg-10">
-                                                <input type="text" name="username" placeholder="User Name" value="<?php echo($user->getUserName());?>" class="form-control">
+                                                <input type="text" name="username" placeholder="User Name" required="required" value="<?php echo($user->getUserName());?>" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-2 control-label">Password</label>
                                             <div class="col-lg-10">
-                                                <input type="text" name="password" placeholder="Password" value="<?php echo(SecurityUtil::Decode($user->getPassword()))?>" class="form-control">
+                                                <input type="text" name="password" placeholder="Password" required="required" value="<?php echo(SecurityUtil::Decode($user->getPassword()))?>" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-2 control-label">Email</label>
                                             <div class="col-lg-10">
-                                                <input type="email" name="emailId" placeholder="Email" value="<?php echo($user->getEmailId());?>" class="form-control">
+                                                <input type="email" name="emailId" placeholder="Email" required="required" value="<?php echo($user->getEmailId());?>" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">

@@ -2,13 +2,14 @@
 require_once('IConstants.inc'); 
 require_once($ConstantsArray['dbServerUrl'] . "FormValidator//validator.php");
 require($ConstantsArray['dbServerUrl'] . "DataStoreMgr//UserDataStore.php");
+require($ConstantsArray['dbServerUrl'] . "DataStoreMgr//LocationDataStore.php");
+require_once($ConstantsArray['dbServerUrl'] . "Utils/DropDownUtils.php"); 
 require($ConstantsArray['dbServerUrl'] . "Utils//StringUtils.php"); 
-
-
-
 $msg = "";
-$UDS = UserDataStore::getInstance(); 
-if ($_POST["formAction"] <> "" ){
+$UDS = UserDataStore::getInstance();
+$LDS = LocationDataStore::getInstance(); 
+$locationSeq = $_POST["locationSeq"]; 
+if ($_POST["formAction"] == "delete" ){
     $UDS->deleteBySeq($_POST['editSeq']);
     $msg = StringUtils::getMessage("Location","User deleted successfully",false);   
 }
@@ -21,7 +22,18 @@ if ($_POST["formAction"] <> "" ){
         <?include("../_InspiniaInclude.php");?>   
     </head>
     <body>
-    <? $Users = $UDS->FindAllUsers($managerSession['locSeq']);?>
+    <?$seq = $managerSession['seq'];
+    if(!empty($locationSeq)){
+        $Users = $UDS->FindAllUsers($locationSeq);    
+    }else{
+        $locationSeqs = $LDS->FindLocationsByUser($seq);
+        $lseq = $managerSession['locSeq'];
+        if(!in_array($lseq,$locationSeqs)){
+            array_push($locationSeqs,$lseq);    
+        }
+        $Users = $UDS->FindAllUsers(implode(",",$locationSeqs)); 
+    }  
+    ?>
   
     <div id="wrapper"> 
          <? include("leftButtons.php");?> 
@@ -30,16 +42,22 @@ if ($_POST["formAction"] <> "" ){
              <tr>       
                 <td style="padding:10px 10px 10px 10px;"><?php echo($msg) ?></td>
            </tr>
+            <tr>
+                <td>
+                    Select Location :
+                    <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","populateRows(this.value)",$locationSeq,"All") ?>
+                 </td> 
+                </tr>
           <tr>
             <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">List of Available Users</td>
             </tr>
           <tr>
-            <td class="ui-widget-content">
+            <td class="ui-widget-content" style="">
             
              <form name="userForm" method="post" action="" >
                    <input type="hidden" name="editSeq" id="editSeq" />
                    <input type="hidden" name="formAction" id="formAction" />                
-                       
+                   <input type="hidden" name="locationSeq" id="locationSeq" value="<?echo $locationSeq?>" />   
                     <table width="100%" border="1" bordercolor="silver" style="border-style:dashed;border-width:thin;border:thin;border-color:#CCCCCC">
                       <tr>
                         <td width="20%" class="ui-widget-header">User Name</td>
@@ -114,5 +132,11 @@ if ($_POST["formAction"] <> "" ){
             document.getElementById('formAction').value =  'delete' ; 
             document.userForm.submit();
         }
+    }
+    function populateRows(locationSeq){
+            document.getElementById('locationSeq').value =  locationSeq;      
+            document.userForm.action = "showUsers.php";
+            document.getElementById('formAction').value =  'populateRows' ; 
+            document.userForm.submit();
     }
 </script>
