@@ -21,7 +21,7 @@ if ($_POST["formAction"] <> "" && $_POST["formAction"] == "delete"){
         <?include("../_InspiniaInclude.php");?>
     </head>
     <body>
-        <Div class="wrapper">
+      <div id="wrapper">   
             <? include("leftButtons.php");?>
             <?
                 $highValueRules = $HVRDS->FindByLocationSeq($managerSession['locSeq']);

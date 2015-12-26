@@ -19,7 +19,7 @@ $FDS = FolderDataStore::getInstance();
         <?include("../_InspiniaInclude.php");?>
     </head>
     <body>
-    <Div class="wrapper">
+    <div id="wrapper">   
         <? include("leftButtons.php");
             $seq = $managerSession['seq'] ;
             if(!empty($locationSeq)){

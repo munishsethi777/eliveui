@@ -156,7 +156,7 @@ function checkChNoUniqueValidation(){
         <?include("../_InspiniaInclude.php");?> 
     </head>
     <body>
-    <div class="wrapper">
+    <div id="wrapper">
         <? include("leftButtons.php");?>
         <div id="page-wrapper" class="gray-bg"> 
        <? include("logOutButton.php"); ?>

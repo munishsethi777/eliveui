@@ -79,7 +79,7 @@ if($_POST["submit"]<>"")
         <?include("../_InspiniaInclude.php");?> 
     </head>
     <body>
-        <div class="wrapper">
+        <div id="wrapper">
             <? include("leftButtons.php");?>
                 <div class="wrapper wrapper-content animated fadeInRight">
                      <?php echo($div)?>  
