@@ -29,11 +29,11 @@
     public static function getUserLocationsDropDown($seq,$selectName,$onChangeMethod,$selectedValue,$noSelectionValue = null){
         $LDS = LocationDataStore ::getInstance();
         $locations = $LDS->FindLocationArrByUser($seq);
-        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";        
+        $str = "<select required='' class='form-control m-b' name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";        
         if(!empty($noSelectionValue)){
-            $str .= "<option value='0'>$noSelectionValue</option>";        
+            $str .= "<option value=''>$noSelectionValue</option>";        
         }else{
-            $str .= "<option value='0'>Select Location</option>";
+            $str .= "<option value=''>Select Location</option>";
         }        
         if($locations != null && $locations <> "" ){
             foreach($locations as $location){

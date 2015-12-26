@@ -21,10 +21,9 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
 <!-- Toastr script -->
     <script src="<?echo$path?>inspinia/js/plugins/toastr/toastr.min.js"></script>
  <!-- Ladda button -->
-    <link rel="stylesheet" href="<?echo$path?>css/ladda-themeless.min.css">
-    <script src="<?echo$path?>js/jquery.form.min.js"></script>
-    <script src="<?echo$path?>js/spin.min.js"></script>
-    <script src="<?echo$path?>js/scripts/ladda.min.js"></script>
+    
+    
+
     
     <script language="javascript">
         function showNotification($msg){

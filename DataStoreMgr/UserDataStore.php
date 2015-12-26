@@ -254,7 +254,7 @@
          public function FindAllUsers($locSeq){
             $conn = self::$db_New->getConnection();
             if($locSeq != null && $locSeq >0){
-                self::$SELECTALLUSERS .= " and locationseq = ".$locSeq;
+                self::$SELECTALLUSERS .= " and locationseq in (".$locSeq.")";
             }
             $stmt = $conn->prepare(self::$SELECTALLUSERS);
             $stmt->execute();
