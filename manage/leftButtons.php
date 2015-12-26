@@ -1,3 +1,54 @@
+<?
+    $page = basename($_SERVER['PHP_SELF']);
+    $dashboard = null;
+    $showStations = null;
+    $mainUsers = null;
+    $createUser = null;
+    $showUsers = null;
+    $mainRules = null;
+    $createRule = null;
+    $showRules = null;
+    $showOccurencies = null;
+    $editMeta = null;
+    $editParams = null;
+    $mainSettings = null;
+    $changePassword = null;
+    $changeEmail = null;
+
+    if($page == "managerTabs.php"){
+        $dashboard = "active";
+    }elseif($page == "showFolders.php"){
+        $showStations = "active";
+    }elseif($page == "createUserForm.php"){
+        $mainUsers = "active";
+        $createUser = "active";
+    }elseif($page == "showUsers.php"){
+        $mainUsers = "active";
+        $showUsers = "active";
+    }elseif($page == "createHighValueRuleForm.php"){
+        $mainRules = "active";
+        $createRule = "active";
+    }elseif($page == "showHighValueRules.php"){
+        $mainRules = "active";
+        $showRules = "active";
+    }elseif($page == "showHighValueOccurences.php"){
+        $showOccurencies = "active";
+    }elseif($page == "editMeta.php"){
+        $editMeta = "active";
+    }elseif($page == "editParameter.php"){
+        $editParams = "active";
+    }elseif($page == "changePassword.php"){
+        $mainSettings = "active";
+        $changePassword = "active";
+    }elseif($page == "changeEmailId.php"){
+        $mainSettings = "active";
+        $changeEmail = "active";
+    }
+
+
+?>
+
+
 <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav metismenu" id="side-menu">
@@ -20,44 +71,37 @@
                         IN+
                     </div>
                 </li>
-                <li class="active">
-                    <a href="managerTabs.php"><i class="fa fa-users"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
+                <li class="<?=$dashboard?>">
+                    <a href="managerTabs.php"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Users</span><span class="fa arrow"></span></a>
+                <li class="<?=$showStations?>"><a href="showFolders.php"><i class="fa fa-desktop"></i> <span class="nav-label">Show Stations</span></a></li>
+                <li class="<?=$mainUsers?>">
+                    <a href="#"><i class="fa fa-group"></i> <span class="nav-label">Manage Users</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li><a href="CreateUserForm.php">Create New</a></li>
-                        <li><a href="showUsers.php">Users</a></li>
+                        <li class="<?=$createUser?>"><a href="createUserForm.php">Create new User</a></li>
+                        <li class="<?=$showUsers?>"><a href="showUsers.php">Show Users</a></li>
                     </ul>
                 </li>
 
-
-                <li>
-                <a href="showFolders.php"><i class="fa fa-folders"></i> <span class="nav-label">Folders</span></a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Settings</span>  <span class="fa arrow"></span></a>
+                <li class="<?=$mainRules?>">
+                    <a href="#"><i class="fa fa-plug"></i> <span class="nav-label">High Value Rules</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li><a href="ChangePassword.php">Change Password</a></li>
-                        <li><a href="changeEmailId.php">Change Email</a></li>
+                        <li class="<?=$createRule?>"><a href="createHighValueRuleForm.php">Create new Rule</a></li>
+                        <li class="<?=$showRules?>"><a href="showHighValueRules.php">Show Rules</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">High Value Rules</span><span class="fa arrow"></span></a>
+                <li class="<?=$showOccurencies?>"><a href="showHighValueOccurences.php"><i class="fa fa-bell-o"></i> High Value Occurences</a></li>
+                <li class="<?=$editMeta?>"><a href="editMeta.php"><i class="fa fa-building-o"></i> <span class="nav-label">Edit Meta Information</span></a></li>
+                <li class="<?=$editParams?>">
+                    <a href="editParameter.php"><i class="fa fa-cog"></i> <span class="nav-label">Edit Parameters</span></a>
+                </li>
+                <li class="<?=$mainSettings?>">
+                    <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">Settings</span>  <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li><a href="CreateHighValueRuleForm.php">Create New</a></li>
-                        <li><a href="showHighValueRules.php">Rules</a></li>
-                        <li><a href="showHighValueOccurences.php">Occurences</a></li>
+                        <li class="<?=$changePassword?>"><a href="ChangePassword.php">Change Password</a></li>
+                        <li class="<?=$changeEmail?>"><a href="changeEmailId.php">Change Email</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">Meta Information</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li><a href="editMeta.php">Edit Meta</a></li>
-                        <li><a href="editParameter.php">Edit Parameters</a></li>
-                    </ul>
-                </li>
-
             </ul>
 
         </div>
