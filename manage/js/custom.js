@@ -81,7 +81,7 @@
        $('#showUsersDialog').dialog("open");
     }
     function getDropDown(keyValueArray,$selectName){
-      var html = "<select name="+$selectName+" class='"+ $selectName +"'>";
+      var html = "<select required class='form-control m-b' name="+$selectName+" class='"+ $selectName +"'>";
       $.each(keyValueArray, function(index, value){
           if(index != 0 && value != null) {
             html+= "<option value='"+ index +"'>"+ value +"</option>";

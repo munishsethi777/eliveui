@@ -81,8 +81,6 @@
 
 ?>
 
-
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -103,8 +101,80 @@
                     $chDDown = DropDownUtils::getChannelsDropDown($channelConfigs,"channelNames","",$highValueRule->getParameter());
                   }     
             ?>
-             <Div id="page-wrapper" class="gray-bg"> 
-                <table width="80%" border="0">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Create HighValue Rule</h5>
+                            </div>  
+                            <div class="ibox-content">
+                                 <form name="frm1" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal">
+                                 <input type="hidden" name="submit" value="submit"/>
+                                 <input type="hidden" name="seq" id="seq" value="<?php echo ($highValueRule->getSeq());?>" / >
+                                 <input type="hidden" name="lastRuleHitFileDataSeq" id="seq" value="<?php echo ($highValueRule->getLastRuleHitFileDataSeq());?>" / >
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Station</label>
+                                        <div class="col-lg-10">
+                                            <? echo $folDDown; ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Email id(s)</label>
+                                        <div class="col-lg-10">
+                                            <input type="email" name="emailIds" placeholder="Email" value="<?php echo($highValueRule->getEmail());?>" required="required" class="form-control"> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Mobile No(s)</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" name="mobileNos" placeholder="Mobile" value="<?php echo($highValueRule->getMobile());?>" required="required" class="form-control"> 
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Parameter</label>
+                                        <div class="col-lg-10 parameterTD">
+                                            <? echo $chDDown; ?> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Highest Value</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" name="highValue" placeholder="Highest Value" value="<?php echo($highValueRule->getHighValue());?>" required="required" class="form-control">  
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Frequency</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" name="frequency" placeholder="Frequency" value="<?php echo($highValueRule->getFrequency());?>" required="required" class="form-control">   
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Activate</label>
+                                        <div class="col-lg-10">
+                                            <?php
+                                               if($highValueRule->getIsActive() == "" || $highValueRule->getIsActive() == "1"){
+                                                 $checked_On = "checked";
+                                               }else{
+                                                  $checked_Off = "checked"; 
+                                               }   
+                                            ?>
+                                            <input name="active" value="true" type="radio"  <?php echo ($checked_On); ?> >On
+                                            <input name="active" value="false" type="radio"  <?php echo ($checked_Off); ?> >Off
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Submit</button>
+                                            <button class="btn btn-white" type="submit" onclick="cancel()">Cancel</button>
+                                        </div>
+                                    </div>     
+                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--table width="80%" border="0">
                    <tr>       
                     <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
                    </tr> 
@@ -169,8 +239,13 @@
                      </td>
                     </tr>
                     
-                </table>
+                </table--> 
             </Div>
         </Div>
     </body>
 </html>
+<script type="text/javascript">
+    function cancel(){
+        location.href = "showHighValueRules.php"
+    }
+</script>

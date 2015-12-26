@@ -59,8 +59,8 @@
         return $str;
     }
     public static function getFoldersDropDownWithStationName($folders,$selectName,$onChangeMethod,$selectedValue){
-        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
-        $str .= "<option value='0'>Select a folder</option>";
+        $str = "<select required class='form-control m-b' name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str .= "<option value=''>Select a folder</option>";
         if($folders != null && $folders <> "" ){
             foreach($folders as $folder){
                 $folderObj = new Folder();
@@ -77,7 +77,7 @@
         return $str;
     }
     public static function getChannelsDropDown($channels,$selectName,$onChangeMethod,$selectedValue){
-        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str = "<select required class='form-control m-b' name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
         $str .= "<option value='0'>Select a ChanelConfig</option>";
         if($channels != null && $channels <> "" ){
             foreach($channels as $channel){
