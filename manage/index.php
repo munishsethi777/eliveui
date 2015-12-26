@@ -49,7 +49,7 @@ if($_POST["submit"]<>"")
                     <h2 class="logo-name"><img src="images/logo.png" alt=""></h2>
                 </div>
                 <h3>Welcome to Envirotech Live</h3>
-                <p>Manger Login in. To see it in action.</p>
+                <p>Manager Login in. To see it in action.</p>
                 <form class="m-t" method="post" role="form" name="frm1" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <input type="hidden" value="submit" name="submit">
                 <div class="form-group">
