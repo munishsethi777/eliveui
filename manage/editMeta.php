@@ -35,8 +35,8 @@ if($_POST["submit"] == "Edit")
          $selSeq = intval($slectedFolder);
          $folder = $folders[$selSeq];
      }
-} 
-if($_POST["submit"] == "Update"){    
+}
+if($_POST["submit"] == "Update"){
     $folderSeq = intval($_POST["selectedFolderSeq"]);
     if($folderSeq == 0){
         $div = "<div class='ui-widget'>
@@ -47,18 +47,18 @@ if($_POST["submit"] == "Update"){
     }else{
         $selSeq  = $folderSeq;
         $folder = $folders[$folderSeq];
-        $folder->setCategory($_POST["category"]); 
-        $folder->setIndustryCode($_POST["indusCode"]); 
+        $folder->setCategory($_POST["category"]);
+        $folder->setIndustryCode($_POST["indusCode"]);
         $folder->setIndustryName($_POST["indusName"]);
         $folder->setAddress($_POST["address"]);
-        $folder->setCity($_POST["city"]); 
+        $folder->setCity($_POST["city"]);
         $folder->setState($_POST["state"]);
         $folder->setZipcode($_POST["zipCode"]);
-        $folder->setLongitude($_POST["longitude"]); 
-        $folder->setLatitude($_POST["latitude"]); 
+        $folder->setLongitude($_POST["longitude"]);
+        $folder->setLatitude($_POST["latitude"]);
         $folder->setEmail($_POST["email"]);
         $folder->setMobile($_POST["mobile"]);
-        $folder->setStationName($_POST["station"]);  
+        $folder->setStationName($_POST["station"]);
         $folder->setDeviceId($_POST["deviceId"]);
         $folder->setVendor($_POST["vendor"]);
         $folder->setMake($_POST["make"]);
@@ -80,145 +80,163 @@ if($_POST["submit"] == "Update"){
 <!DOCTYPE html>
 <html>
     <head>
-    <? include("_jsAdminInclude.php");?>
-    <?include("../_InspiniaInclude.php");?> 
+        <?include("_jsAdminInclude.php");?>
+        <?include("../_InspiniaInclude.php");?>
     </head>
     <body>
-    <div class="wrapper">
+    <div id="wrapper">
         <? include("leftButtons.php");?>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <?php echo($div) ?>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Edit Meta Information</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form name="frm1" method="post" action="editMeta.php" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Select Station</label>
+                                    <div class="col-sm-6">
+                                        <? echo DropDownUtils::getFoldersDropDownWithStationName($folders,"l_DropDown","setLocation()",$selSeq) ?>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" name="submit" type="submit">Edit</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <form name="frm1" method="post" action="editMeta.php" class="form-horizontal">
+                                <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Category</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="category" type="text" size="50" value="<?php echo($folder->getCategory());?>" >
+                                    </div>
+                                </div>
 
-       <div id="page-wrapper" class="gray-bg">
-            <table width="80%" border="0">
-          <tr>
-            <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-           </tr>
-          <tr>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry Code</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="indusCode" type="text" size="50" value="<?php echo($folder->getIndustryCode());?>" >
+                                    </div>
+                                </div>
 
-            <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Edit Meta</td>
-            </tr>
-          <tr>
-            <td class="ui-widget-content">
-                <form name="frm1" method="post" action="editMeta.php">
-                    <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry Name</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="indusName" type="text" size="50" value="<?php echo($folder->getIndustryName());?>" >
+                                    </div>
+                                </div>
 
-                      <tr>
-                        <td width="22%">Select Folder</td>
-                        <td width="78%">
-                        
-                            <? echo DropDownUtils::getFoldersDropDownWithStationName($folders,"F_DropDown","setLocation()",$selSeq) ?>
-                              <input type="submit" name="submit" value="Edit">
-                          &nbsp;</td>
-                      </tr>
-                      </table>
-                  </form>
-             </td>
-            </tr>
-            <tr>
-            <td class="ui-widget-content">
-                <form name="frm1" method="post" action="editMeta.php">
-                    <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
-                    <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                      <tr>
-                        <td width="22%">Category</td>
-                        <td width="78%"><input name="category" type="text" size="50" value="<?php echo($folder->getCategory());?>" >
-                          &nbsp;</td>
-                      </tr>  
-                      <tr>
-                        <td width="22%">Industry Code</td>
-                        <td width="78%"><input name="indusCode" type="text" size="50" value="<?php echo($folder->getIndustryCode());?>" >
-                          &nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td width="22%">Industry Name</td>
-                        <td width="78%"><input name="indusName" type="text" size="50" value="<?php echo($folder->getIndustryName());?>" >
-                          &nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td width="22%">Address</td>
-                        <td width="78%"><input name="address" type="text" size="50" value="<?php echo($folder->getAddress());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">City</td>
-                        <td width="78%"><input name="city" type="text" size="50" value="<?php echo($folder->getCity());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">State</td>
-                        <td width="78%"><input name="state" type="text" size="50" value="<?php echo($folder->getState());?>" >
-                          &nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td width="22%">Zipcode</td>
-                        <td width="78%"><input name="zipCode" type="text" size="50" value="<?php echo($folder->getZipcode());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">Longitude</td>
-                        <td width="78%"><input name="longitude" type="text" size="50" value="<?php echo($folder->getLongitude());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">Latitude</td>
-                        <td width="78%"><input name="latitude" type="text" size="50" value="<?php echo($folder->getLatitude());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">Email</td>
-                        <td width="78%"><input name="email" type="text" size="50" value="<?php echo($folder->getEmail());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">Mobile</td>
-                        <td width="78%"><input name="mobile" type="text" size="50" value="<?php echo($folder->getMobile());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">Station</td>
-                        <td width="78%"><input name="station" type="text" size="50" value="<?php echo($folder->getStationName());?>" >
-                          &nbsp;</td>
-                      </tr> 
-                      <tr>
-                        <td width="22%">Device Id</td>
-                        <td width="78%"><input name="deviceId" type="text" size="50" value="<?php echo($folder->getDeviceId());?>" >
-                          &nbsp;</td>
-                      </tr>
-                       <tr>
-                        <td width="22%">Vendor</td>
-                        <td width="78%"><input name="vendor" type="text" size="50" value="<?php echo($folder->getVendor());?>" >
-                          &nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td width="22%">Make</td>
-                        <td width="78%"><input name="make" type="text" size="50" value="<?php echo($folder->getMake());?>" >
-                          &nbsp;</td>
-                      </tr>
-                       <tr>
-                        <td width="22%">Model</td>
-                        <td width="78%"><input name="model" type="text" size="50" value="<?php echo($folder->getModel());?>" >
-                          &nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td width="22%">Certification System</td>
-                        <td width="78%"><input name="cSystem" type="text" size="50" value="<?php echo($folder->getCertificationsSystem());?>" >
-                          &nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td>&nbsp;</td>
-                        <td>
-                         <input type="submit" name="submit" value="Update">
-                         <input type="reset" name="Reset" value="Reset">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry Address</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="address" type="text" size="50" value="<?php echo($folder->getAddress());?>" >
+                                    </div>
+                                </div>
 
-                        </td>
-                      </tr>
-                      </table>
-                  </form>
-             </td>
-            </tr>
-        </table>
-        </Div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry City</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="city" type="text" size="50" value="<?php echo($folder->getCity());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry State</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="state" type="text" size="50" value="<?php echo($folder->getState());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry Zipcode</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="zipcode" type="text" size="50" value="<?php echo($folder->getZipcode());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry Longitude</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="longitude" type="text" size="50" value="<?php echo($folder->getLongitude());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Industry Latitude</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="latitude" type="text" size="50" value="<?php echo($folder->getLatitude());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="email" type="text" size="50" value="<?php echo($folder->getEmail());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Mobile</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="mobile" type="text" size="50" value="<?php echo($folder->getMobile());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Station Name</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="station" type="text" size="50" value="<?php echo($folder->getStationName());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Device Id</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="deviceId" type="text" size="50" value="<?php echo($folder->getDeviceId());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Vendor</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="vendor" type="text" size="50" value="<?php echo($folder->getVendor());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Make</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="make" type="text" size="50" value="<?php echo($folder->getMake());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Model</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="model" type="text" size="50" value="<?php echo($folder->getModel());?>" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Certification System</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" name="cSystem" type="text" size="50" value="<?php echo($folder->getCertificationsSystem());?>" >
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" name="submit" type="submit">Update Meta</button>
+
+
+
+
+                            </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?include("footer.php"); ?>
     </div>
-
-
     </body>
 </html>
