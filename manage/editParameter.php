@@ -34,16 +34,11 @@ if($_POST["call"] == "delete"){
     $seq = $_POST["delSeq"];
     $CDS->DeleteBySeq(intval($seq));
 }
-if($_POST["submit"] == "Edit")
+if($_POST["call"] == "edit")
 {
      $slectedFolder = $_POST["F_DropDown"];
-     if($slectedFolder == "0"){
-        $errMsg = "Please Select Folder";
-     }
-     if($errMsg != null && $errMsg != ""){
-        
-     }else{
-         $selSeq = intval($slectedFolder);
+     if(!empty($slectedFolder)){
+        $selSeq = intval($slectedFolder);
          $channlConfigs = $CDS->FindByFolder($selSeq);
          $folder = $folders[$selSeq];
          if($folder->getStationType() == "stack" || $folder->getStationType() == "effluent"){
@@ -51,12 +46,12 @@ if($_POST["submit"] == "Edit")
          }else{
              $isdataExist = $WFDS->isFileDataExist($selSeq);
          }
-         
      }
+    
 } 
 $dupNoChArr = array();
 $chNoArr = array();
-if($_POST["submit"] == "Update")
+if($_POST["action"] == "update")
 {
       $channalSeqs = $_POST["chseq"];
       $selSeq = intval($_POST["selectedFolderSeq"]);
@@ -79,6 +74,9 @@ if($_POST["submit"] == "Update")
                  $chConfigObj = new ChannelConfiguration();
                  $chConfigObj->setFolderSeq($selSeq);                 
                  $chConfigObj->setChannelStatusFlag(1);                 
+            }
+            if(!$chConfigObj){
+                continue;
             }
             $chNo = $_POST["chno".$count];            
             $chName = $_POST["chName".$count];
@@ -158,95 +156,90 @@ function checkChNoUniqueValidation(){
     <body>
     <div id="wrapper">
         <? include("leftButtons.php");?>
-        <div id="page-wrapper" class="gray-bg"> 
-       <? include("logOutButton.php"); ?>
-
-
-        <table width="80%" border="0">
-          <tr>
-            <td style="padding:10px 10px 10px 10px;"><?php echo($div) ?></td>
-          </tr>
-          <tr>
-            <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">Edit Parameters</td>
-          </tr>
-          <tr>
-            <td class="ui-widget-content">
-                <form name="frm1" method="post" action="editParameter.php">
-                    <table width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                      <tr>
-                        <td width="22%">Select Folder</td>
-                        <td width="78%">                    
-                            <? echo DropDownUtils::getFoldersDropDownWithStationName($folders,"F_DropDown","setLocation()",$selSeq) ?>
-                              <input type="submit" name="submit" value="Edit">
-                          &nbsp;
-                        </td>
-                      </tr>
-                    </table>
-                </form>
-             </td>
-            </tr>
-          <tr>
-            <td class="ui-widget-content">
-                <form name="chform" id="chform" method="post" action="editParameter.php">
-                    <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
-                    <input type="hidden" name="delSeq" id = "delSeq">
-                    <input type="hidden" name="call" id="call" >
-                    <table id="chTable" width="100%" border="0" style="padding:10px 10px 10px 10px;">
-                         <tr>
-                           <td><strong>Channel No</strong></td>
-                           <td><strong>Channel Name</strong></td>
-                           <td><strong>Channel Unit</strong></td>
-                           <td><strong>Sub Station</strong></td>
-                           <td><strong>Prescribed Limit</strong></td>
-                         </tr>
-                         <?$index = 0;?>
-                      
-                         <?foreach($channlConfigs as $ch){
-                             $index++;?>
-                             <input name="chseq[]" type="hidden" value="<?echo $ch->getSeq()?>">       
-                             <tr id="row<?echo $index?>">
-                                 <td><input name="chno<?echo $index?>" type="text" size="5" value="<?echo $ch->getChannelNumber()?>" ></td>
-                                 <td><input name="chName<?echo $index?>" type="text" size="20" value="<?echo $ch->getChannelName()?>" ></td>
-                                 <td><input name="chUnit<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelUnit()?>" ></td>
-                                 <td><input name="substation<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelStation()?>" ></td>
-                                  <td><input name="prescribedlimit<?echo $index?>" type="text" size="15" value="<?echo $ch->getPrescribedLimit()?>" ></td>
-                                 <?if(!$isdataExist){?>
-                                  <td><a href='javascript:Delete(<?echo $ch->getSeq()?>)' title='Delete'>
-                                    <img src='images/delete.png'  border='0'/> 
-                                  </a></td>
-                                  <?}?>
-                             </tr>
-                         <?}?>
-                     </table>
-                     <table style="padding:10px 10px 10px 10px;">
-                       <tr>
-                            <td>&nbsp;</td>
-                            <td>
-                                <input type="submit" name="submit" value="Update">
-                                <input type="reset" name="Reset" value="Reset">
-                                <?if(!$isdataExist){?>
-                                    <input style="float: right;" onclick="javascript:addRows()" type="button" name="addRow" value="Add">    
-                                <?}?>
-                            </td>
-                      </tr>
-                    </table> 
-                </form>
-             </td>
-            </tr>
-        </table>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <?php echo($div)?>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Edit Parameters</h5>
+                        </div>
+                        <div class="ibox-content">
+                             <form name="form1" id="form1" method="post" action="editParameter.php">
+                                <input type="hidden" name="call" id="call">
+                                 <div class="form-group">
+                                    <label class="col-sm-1 control-label">Station</label>
+                                    <div class="col-sm-10">
+                                        <? echo DropDownUtils::getFoldersDropDownWithStationName($folders,"F_DropDown","editParameters()",$selSeq) ?>
+                                    </div>
+                                </div>  
+                             </form>
+                              
+                            <form name="chform" id="chform" method="post" action="editParameter.php" class="form-inline">
+                                <input type="hidden" name="action" id="action">
+                                <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
+                                <input type="hidden" name="delSeq" id = "delSeq">
+                                <?if(empty($channlConfigs)){?>
+                                    <span class="label label-info">Select Staion for populate parametes</span>
+                                <?}else{?>
+                                <table id="chTable" class="table">
+                                    
+                                     <thead>
+                                         <tr>
+                                           <td>Channel No</td>
+                                           <td>Channel Name</td>
+                                           <td>Channel Unit</td>
+                                           <td>Sub Station</td>
+                                           <td>Prescribed Limit</td>
+                                         </tr>
+                                     </thead>
+                                     <?$index = 0;?>
+                                    
+                                     <?foreach($channlConfigs as $ch){
+                                         $index++;?>
+                                         <input name="chseq[]" type="hidden" value="<?echo $ch->getSeq()?>">       
+                                         <tr id="row<?echo $index?>">                                            
+                                             <td><input class="form-control" name="chno<?echo $index?>" type="text" size="5" value="<?echo $ch->getChannelNumber()?>" ></td>
+                                             <td><input class="form-control" name="chName<?echo $index?>" type="text" size="20" value="<?echo $ch->getChannelName()?>" ></td>
+                                             <td><input class="form-control" name="chUnit<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelUnit()?>" ></td>
+                                             <td><input class="form-control" name="substation<?echo $index?>" type="text" size="15" value="<?echo $ch->getChannelStation()?>" ></td>
+                                              <td><input class="form-control" name="prescribedlimit<?echo $index?>" type="text" size="15" value="<?echo $ch->getPrescribedLimit()?>" ></td>
+                                             <?if(!$isdataExist){?>
+                                              <td><a href='javascript:Delete(<?echo $ch->getSeq()?>)' title='Delete'>
+                                                <img src='images/delete.png'  border='0'/> 
+                                              </a></td>
+                                              <?}?>
+                                              <td></td>
+                                         </tr>
+                                     <?}?>
+                                 </table>
+                                 <div class="form-group">
+                                        <div class="col-lg-20">
+                                            <button class="btn btn-primary" onclick="update()" type="submit"><i class="fa fa-check"></i>&nbsp;Update</button>
+                                            <button class="btn btn-w-m btn-success" onclick="javascript:addRows()" type="button" onclick="cancel()">Add Row</button>
+                                             <button class="btn btn-white" type="reset">Cancel</button>
+                                        </div>
+                                 </div>     
+                                 <?}?>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </Div>
+    </div>
     </body>
 </html>
  <script language="javascript">
-    var index = "<?echo $index?>"; 
+    var index = "<?echo $index?>";
+     
     function addRows(){ 
         index = parseInt(index) + 1;       
-        var html = '<tr id="row' + index + '"><input name="chseq[]" type="hidden"><td><input name="chno'+ index + '" type="text" size="5"></td>';
-                    html +='<td><input name="chName'+ index + '" type="text" size="20"></td>';
-                    html +='<td><input name="chUnit'+ index + '" type="text" size="15"></td>'
-                    html +='<td><input name="substation'+ index + '" type="text" size="15"></td>'
-                    html +='<td><input name="prescribedlimit'+ index + '" type="text" size="15"></td>'
+        var html = '<tr id="row' + index + '"><input class="form-control"  name="chseq[]" type="hidden"><td><input class="form-control"  name="chno'+ index + '" type="text" size="5"></td>';
+                    html +='<td><input class="form-control"  name="chName'+ index + '" type="text" size="20"></td>';
+                    html +='<td><input class="form-control"  name="chUnit'+ index + '" type="text" size="15"></td>'
+                    html +='<td><input class="form-control"  name="substation'+ index + '" type="text" size="15"></td>'
+                    html +='<td><input class="form-control"  name="prescribedlimit'+ index + '" type="text" size="15"></td>'
                          
                     html +='<td><a href="javascript:Delete(0)" title=Delete><img src="images/delete.png"  border="0"/></a></td>'
                     html +='</tr>';
@@ -254,26 +247,35 @@ function checkChNoUniqueValidation(){
        $('#chTable > tbody:last-child').append(html);
       
     }
+    function editParameters(){
+         $("#call").val("edit");
+         $("form[name='form1']").submit();
+    }
+    function update(){
+         $("#action").val("update");
+         $("form[name='form1']").submit();
+    }
     function Delete(seq){
-        var r = confirm("Are you realy want to delete?");
-        if(r){
-            $('#row' + index).remove();
-             index = parseInt(index) - 1 ;
-             if(seq > 0){
-                $("#call").val("delete");
-                $("#delSeq").val(seq);
-                $.ajax({
-                type: 'POST',
-                url: "editParameter.php",
-                data: {
-                    call: "delete",
-                    delSeq: seq,
-                },
-                complete: function () {
-                    //window.location.reload(true);
-                }
-});  
-             }
-         } 
+        bootbox.confirm("Are you sure?", function(result) { 
+            if(result){
+                $('#row' + index).remove();
+                 index = parseInt(index) - 1 ;
+                 if(seq > 0){
+                    $("#call").val("delete");
+                    $("#delSeq").val(seq);
+                    $.ajax({
+                        type: 'POST',
+                        url: "editParameter.php",
+                        data: {
+                            call: "delete",
+                            delSeq: seq,
+                        },
+                        complete: function () {
+                            //window.location.reload(true);
+                        }
+                    });  
+                 }
+             } 
+         });
     }
 </script>

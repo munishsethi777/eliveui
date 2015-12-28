@@ -20,8 +20,8 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
     <script src="<?echo$path?>inspinia/js/plugins/pace/pace.min.js"></script>
 <!-- Toastr script -->
     <script src="<?echo$path?>inspinia/js/plugins/toastr/toastr.min.js"></script>
- <!-- Ladda button -->
-    
+ <!-- BootBox -->
+      <script src="<?echo$path?>inspinia/js/plugins/bootBox/bootbox.min.js"></script> 
     
 
     
