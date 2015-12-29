@@ -118,7 +118,7 @@
     }   
     
     public static function getFoldersDropDown($folders,$selectName,$onChangeMethod,$selectedValue){
-        $str = "<select name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
+        $str = "<select required class='form-control m-b' name='". $selectName ."' id='". $selectName ."' onchange='". $onChangeMethod ."'>";
         $str .= "<option value='0'>Select a Station</option>";
         if($folders != null && $folders <> "" ){
             foreach($folders as $folder){

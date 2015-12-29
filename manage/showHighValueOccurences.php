@@ -20,7 +20,7 @@ $folderSeq = "";
 $fromDateForm = "";
 $toDateForm = "";
 $remindersCount = null;
-if ($_POST["Submit"] <> "" && $_POST["Submit"] == "Submit"){
+if ($_POST["action"] == "populatedata"){
     $folderSeq = $_POST["folder"];
     $fromDateForm = $_POST["fromDate"];
     $toDateForm = $_POST["toDate"];
@@ -47,7 +47,7 @@ if ($_POST["Submit"] <> "" && $_POST["Submit"] == "Submit"){
     $logs = $HVRRDS->getHighValueReminderLogs($folderSeq,$fromDateStr, $toDateStr);
     $logs = json_encode($logs);
 }
-$folDDown = DropDownUtils::getFoldersDropDown($folders,"folder","nope()",$folderSeq);
+$folDDown = DropDownUtils::getFoldersDropDownWithStationName($folders,"folder","",$folderSeq);
 if (isset($_POST["call"]) && $_POST["call"] == "exportLogs"){    
     $folderSeq = $_POST["folderSeq"];
     $fromDateForm = $_POST["fromDate"];
@@ -67,39 +67,17 @@ if (isset($_POST["call"]) && $_POST["call"] == "exportLogs"){
 <!DOCTYPE html>
 <html>
     <head>
-        <? include("_jsAdminInclude.php");?>
-        <?include("../_InspiniaInclude.php");?> 
+     <? include("_jsAdminInclude.php");?>
+     <?include("../_InspiniaInclude.php");?> 
     </head>
     <body>
-        <div id="wrapper">   
-            <? include("leftButtons.php");
-                $highValueRules = null;
-            ?>
-            <Div id="page-wrapper" class="gray-bg">
-                <h3>Select a Station to view its High Value Occurences</h3>
-                <form action="showHighValueOccurences.php" method="POST" name="highOccurencesForm">
-                    <table style="border-style: dashed" border="1" width="400px">
-                        <tr>
-                            <td width="150px" class="ui-widget-header">Select Station :</td>
-                            <td class="ui-widget-content"><? echo $folDDown;?></td>
-                        </tr>
-                        <tr>
-                            <td width="100px" class="ui-widget-header">From Date :</td>
-                            <td class="ui-widget-content"><input type="text" size="20" value="<?echo $fromDateForm?>" name="fromDate" id="fromDate"></td>
-                        </tr>
-                        <tr>
-                            <td width="100px" class="ui-widget-header">To Date :</td>
-                            <td class="ui-widget-content"><input type="text" size="20" value="<?echo $toDateForm?>" name="toDate" id="toDate"></td>
-                        </tr>
-                        <tr>
-                            <td width="100px" class="ui-widget-content"></td>
-                            <td class="ui-widget-content"><input type="submit" name="Submit" value="Submit"></td>
-                        </tr>
-                    </table>
-                </form>
-                <table width="80%" border="0">
-                     <tr>
-                        <td>
+    <div id="wrapper">       
+        <? include("leftButtons.php");
+        $highValueRules = null;?>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
                         <? if($isError == 1){ ?>
                             <div class='ui-widget'>
                                <div  class='ui-state-error ui-corner-all' style='padding: 0 .7em;'>
@@ -107,64 +85,95 @@ if (isset($_POST["call"]) && $_POST["call"] == "exportLogs"){
                                        <strong>Error during date fetching :</strong> <br/><br/><? echo $msg ?></p>
                                </div></div>
                         <? } ?>
-                        </td>
-                   </tr>
-                </table>
-                <? if($isError == 0 and $remindersCount != null){ 
-                    $folder = $folders[intval($folderSeq)]?>
-                    <table width="80%" border="0">
-                  <tr>
-                    <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">High Value occurences for <?echo $folder->getFolderName()?>  of various parameters during
-                    <? echo ($fromDateForm .' and '. $toDateForm);?></td>
-                    </tr>
-                  <tr>
-                    <td class="ui-widget-content">
-
-                     <form name="userForm" method="post" action="" >
-                           <input type="hidden" name="editSeq" id="editSeq" />
-                           <input type="hidden" name="formAction" id="formAction" />
-
-                            <table width="100%" border="1" bordercolor="silver" style="border-style:dashed;border-width:thin;border:thin;border-color:#CCCCCC">
-                              <tr>
-                                <td width="200px" class="ui-widget-header">Parameters</td>
-                              <?
-                                foreach($remindersCount as $reminder){
-                                    echo '<td class="ui-widget-content">'. $reminder['channelname'] .'</td>';
-                                }
-                              ?>
-                              </tr>
-                              <tr>
-                                <td width="200px" class="ui-widget-header">Number of times exceedances occurred</td>
-                                  <?
-                                    foreach($remindersCount as $reminder){
-                                        echo '<td class="ui-widget-content">'. $reminder['totalReminders'] .'</td>';
-                                    }
-                                  ?>
-                              </tr>
-                            </table>
-                         </form>
-                     </td>
-                    </tr>
-                    
-                </table> 
-                    </br>
-                    <form name="exportLogsForm" id="exportLogsForm" method="post" action="showHighValueOccurences.php" >
-                        <input type="hidden" name= "folderSeq" value="<?echo $folderSeq?>" >
-                        <input type="hidden" name= "fromDate" value="<?echo $fromDateForm?>" >
-                        <input type="hidden" name= "toDate" value="<?echo $toDateForm?>" >
-                        <input type="hidden" name= "call" value="exportLogs" >
-                        <div id="jqxgrid"></div>
-                    </form>
-                <? } ?>
-            </Div> 
-        </Div>
+                        <div class="ibox-title">
+                            <h5>High Value Occurences</h5>
+                        </div>
+                        <div class="ibox-content">
+                               
+                            <form action="showHighValueOccurences.php" method="POST" name="highOccurencesForm" class="form-horizontal">
+                                <input type="hidden" name="action" id="action" value="populatedata">
+                                 <div class="form-group">
+                                    <label class="col-lg-2 control-label">Station</label>
+                                    <div class="col-lg-5">
+                                        <? echo $folDDown; ?>
+                                    </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <label class="col-lg-2 control-label">From Date</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" name="fromDate" id="fromDate" placeholder="Select Date" value="<?echo $fromDateForm?>" required="required" class="form-control"> 
+                                    </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <label class="col-lg-2 control-label">To Date</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" name="toDate" id="toDate" placeholder="Select Date"  value="<?echo $toDateForm?>" required="required" class="form-control"> 
+                                    </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+                                    </div>
+                                 </div>
+                            </form>
+                            <?if($isError == 0 and $remindersCount != null){ 
+                                $folder = $folders[intval($folderSeq)]?>
+                                <table class="table">
+                                  <tr>
+                                    <td><h5>High Value occurences for <?echo $folder->getFolderName()?>  of various parameters during
+                                    <? echo ($fromDateForm .' and '. $toDateForm);?></h5></td>
+                                    </tr>
+                                  <tr>
+                                    <td>
+                                            <table class = "table">
+                                              <tr>
+                                                <td><b>Parameters</b></td>
+                                              <?
+                                                foreach($remindersCount as $reminder){
+                                                    echo '<td >'. $reminder['channelname'] .'</td>';
+                                                }
+                                              ?>
+                                              </tr>
+                                              <tr>
+                                                <td><b>Number of times exceedances occurred</b></td>
+                                                  <?
+                                                    foreach($remindersCount as $reminder){
+                                                        echo '<td>'. $reminder['totalReminders'] .'</td>';
+                                                    }
+                                                  ?>
+                                              </tr>
+                                            </table>
+                                         
+                                     </td>
+                                    </tr>
+                                    
+                                </table>
+                               
+                                <form name="exportLogsForm" id="exportLogsForm" method="post" action="showHighValueOccurences.php" >
+                                    <input type="hidden" name= "folderSeq" value="<?echo $folderSeq?>" >
+                                    <input type="hidden" name= "fromDate" value="<?echo $fromDateForm?>" >
+                                    <input type="hidden" name= "toDate" value="<?echo $toDateForm?>" >
+                                    <input type="hidden" name= "call" value="exportLogs" >
+                                    <div id="jqxgrid"></div>
+                                </form>
+                            <?}?>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
     </body>
 </html>
-  
+ <?include("../_jqxGridInclude.php");?>    
 <script type="text/javascript">
         $(document).ready(function (){
-            $('#fromDate').datetimepicker({step:5,format:"m/d/Y"});
-            $('#toDate').datetimepicker({step:5,format:"m/d/Y"}); 
+         
+            $('#toDate').datetimepicker({format:"m/d/Y",timepicker:false});
+            $('#fromDate').datetimepicker({
+                timepicker:false,
+                format:'m/d/Y'
+            });
             data = '<?echo $logs?>';
             var source =
             {
@@ -182,7 +191,7 @@ if (isset($_POST["call"]) && $_POST["call"] == "exportLogs"){
             var dataAdapter = new $.jqx.dataAdapter(source);
             $("#jqxgrid").jqxGrid(
             {
-                width: 800,
+                width: 900,
                 source: dataAdapter,                
                 pageable: true,
                 autoheight: true,
@@ -199,13 +208,13 @@ if (isset($_POST["call"]) && $_POST["call"] == "exportLogs"){
                 columns: [
                   { text: 'Dated',  datafield: 'Dated', width: 200, cellsformat: 'MM-dd-yyyy hh:mm:ss tt' },
                   { text: 'Mobile',  datafield: 'Mobile', width: 100 },
-                  { text: 'Email Id',  datafield: 'Email', width: 230 },
-                  { text: 'Parameter', datafield: 'Parameter', width: 120 },
+                  { text: 'Email Id',  datafield: 'Email', width: 250 },
+                  { text: 'Parameter', datafield: 'Parameter', width: 200 },
                   { text: 'HighValue',  datafield: 'Highvalue',width: 150 },
                 ],
                  renderstatusbar: function (statusbar) {
                     // appends buttons to the status bar.
-                    var container = $("<div style='overflow: hidden; position: relative; margin: 5px;height:30px'></div>");
+                                       var container = $("<div style='overflow: hidden; position: relative; margin: 5px;height:30px'></div>");
                     var exportButton = $("<div style='float: left;'><i class='fa fa-plus-square'></i><span style='margin-left: 4px; position: relative;'>Export</span></div>");
                  container.append(exportButton);
                  statusbar.append(container);

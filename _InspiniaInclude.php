@@ -8,11 +8,12 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
     <link href="<?echo$path?>inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="<?echo$path?>inspinia/css/animate.css" rel="stylesheet">
     <link href="<?echo$path?>inspinia/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<?echo$path?>css/jquery.datetimepicker.css"/>  
 <!-- Toastr style -->
     <link href="<?echo$path?>inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
 <!-- Mainly scripts -->
-    <script src="<?echo$path?>inspinia/js/jquery-2.1.1.js"></script>
+    <script src="<?echo$path?>inspinia/js/jquery-2.1.1.js"></script>      
     <script src="<?echo$path?>inspinia/js/bootstrap.min.js"></script>
     <script src="<?echo$path?>inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="<?echo$path?>inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
@@ -21,8 +22,9 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
 <!-- Toastr script -->
     <script src="<?echo$path?>inspinia/js/plugins/toastr/toastr.min.js"></script>
  <!-- BootBox -->
-      <script src="<?echo$path?>inspinia/js/plugins/bootBox/bootbox.min.js"></script> 
-    
+    <script src="<?echo$path?>inspinia/js/plugins/bootBox/bootbox.min.js"></script> 
+ <!-- DatePicker --> 
+    <script src="<?echo$path?>js/jquery.datetimepicker.full.min.js"></script>
 
     
     <script language="javascript">

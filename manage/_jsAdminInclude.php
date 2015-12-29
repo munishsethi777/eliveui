@@ -9,10 +9,6 @@
 <script type="text/javascript" src="js/jquery-ui.custom.min.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript" src="../admin/js/chosen/chosen.jquery.js"></script>
-<!-- datepicker-->
-<link href="css/jquery.datetimepicker.css" rel="stylesheet">
-<script src="js/jquery.datetimepicker.js"></script>
-<!---->
 <script type="text/javascript" src="../jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="../jqwidgets/jqxdata.js"></script> 
 <script type="text/javascript" src="../jqwidgets/jqxbuttons.js"></script>
