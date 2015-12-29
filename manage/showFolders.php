@@ -1,4 +1,5 @@
-<?
+<?session_start(); 
+$managerSession = $_SESSION["managerSession"];
 require_once('IConstants.inc'); 
 require_once($ConstantsArray['dbServerUrl'] . "FormValidator//validator.php");
 require($ConstantsArray['dbServerUrl'] . "DataStoreMgr//FolderDataStore.php");
@@ -9,135 +10,137 @@ require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//M2MSynchronizerData
 
 $LDS = LocationDataStore ::getInstance();
 $locations = $LDS->FindAll();
-$locationSeq = $_POST["locationSeq"];
+$locationSeq = $_GET["locationSeq"];
 $FDS = FolderDataStore::getInstance();
+$seq = $managerSession['seq'] ;
+$call = $_GET["call"];
+if(empty($call)){
+    $call = $_POST["call"];    
+}
+if($call == "getFolders"){   
+    if(!empty($locationSeq)){
+        $locationSeqs = $locationSeq;
+    }else{
+        $locationSeqs = $LDS->FindLocationsByUser($seq);
+        $lseq = $managerSession['locSeq'];
+        if(!in_array($lseq,$locationSeqs)){
+            array_push($locationSeqs,$lseq);    
+        }
+        $locationSeqs = implode(",",$locationSeqs);  
+    }
+    $folders = $FDS->FindJsonByLocationSeqs($locationSeqs);
+    echo $folders;
+    return;
+}
 ?>   
 <!DOCTYPE html>
 <html>
     <head>
-        <? include("_jsAdminInclude.php");?>
-        <?include("../_InspiniaInclude.php");?>
+        <? include("_jsAdminInclude.php");
+        include("../_InspiniaInclude.php");?>     
     </head>
     <body>
     <div id="wrapper">   
-        <? include("leftButtons.php");
-            $seq = $managerSession['seq'] ;
-            if(!empty($locationSeq)){
-                  $folders = $FDS->FindByLocation($locationSeq);    
-            }else{
-                   $seq = $managerSession['seq'];
-                   $locationSeqs = $LDS->FindLocationsByUser($seq);
-                   $lseq = $managerSession['locSeq'];
-                   if(!in_array($lseq,$locationSeqs)){
-                        array_push($locationSeqs,$lseq);    
-                   }
-                   $folders = $FDS->FindByLocationSeqs(implode(",",$locationSeqs)); 
-            }  
-         ?>
-        <div id="page-wrapper" class="gray-bg">     
-            <table width="80%" border="0">
-              <tr>
-             
-                <td>
-                    Select Location :
-                    <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","populateRows(this.value)",$locationSeq) ?>
-                 </td> 
-                </tr>
-              <tr>
-                <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">List of Available Location Folders</td>
-                </tr>
-              <tr>
-                <td class="ui-widget-content">
-                  <form name="folderForm" method="post" action="" > 
-                    <input type="hidden" name="editSeq" id="editSeq" />
-                       <input type="hidden" name="formAction" id="formAction" />
-                       <input type="hidden" name="isEnabled" id="isEnabled" />
-                       <input type="hidden" name="path" id="path" />  
-                        <input type="hidden" name="locationSeq" id="locationSeq" value="<?echo $locationSeq?>" /> 
-				        <table width="100%" border="1" bordercolor="silver" style="border-style:dashed;border-width:thin;border:thin;border-color:#CCCCCC">
-				          <tr>
-                            <td width="2%" class="ui-widget-header">Status</td>
-                             <td width="5%" class="ui-widget-header">Visible</td>                   
-					        <td width="12%" class="ui-widget-header">Folder</td> 
-                            <td width="10%" class="ui-widget-header">Last Synched</td>
-                            <td width="10%" class="ui-widget-header">Last Reminder</td>
-				          </tr>
-				          <? foreach($folders as $folder){
-                              $synchedOnStr = "";
-                              $parsedOnStr = "";
-                              $remindedOnStr = "";
-                              
-                              if($folder->getLastSynchedOn()!= ""){
-                                    $lastSynchedOn = new DateTime($folder->getLastSynchedOn(), new DateTimeZone('Asia/Kolkata'));
-                                    $synchedOnStr = $lastSynchedOn->format('Y-m-d H:i:s');
-                              }
-                              if($folder->getLastParsedOn()!= ""){
-                                    $lastParsedOn = new DateTime($folder->getLastParsedOn(), new DateTimeZone('Asia/Kolkata'));
-                                    $parsedOnStr = $lastParsedOn->format('Y-m-d H:i:s');
-                              }
-                              if($folder->getLastSynchedOn()!= ""){
-                                    $lastRemindedOn = new DateTime($folder->getLastRemindedOn(), new DateTimeZone('Asia/Kolkata'));
-                                    $remindedOnStr = $lastRemindedOn->format('Y-m-d H:i:s');
-                              }
-                              
-                              
-                              $loationObj = new Location();
-                              $loationObj = $locations[$folder->getLocationSeq()];
-                              $locationName = $loationObj->getLocationFolder();
-                              $fullPath = $ConstantsArray['rootURL']. "Repository/" . $locationName . "/" . $folder->getActualName();                      
-                              $path = $ConstantsArray['rootURL']. "Repository/"   . $locationName . "/" . $folder->getFolderName() ;    
-                              $title = "Assign Permissions on Folder (" . $folder->getFolderName() . ") location of (" . $locationName . ")";
-                              $statusCol = "<tr><td><img src='images/tick.png' border='0' title='Enabled'/></td>";
-                              $visibleCol = "<td><img src='images/tick.png' border='0' title='Visible'/></td>"; 
-                              if( $folder->getIsEnable() == "0"){
-                                   $statusCol = "<tr><td><img src='images/tick_grey.png' border='0' title='Disabled'/></td>";
-                              }
-                              if($folder->getIsVisible() == "0"){
-                                  $visibleCol = "<td><img src='images/tick_grey.png' border='0' title='InVisible'/></td>";
-                              }  
-                              $pathCol = "<a target='_blank' href='" . $fullPath . "'>" . $folder->getFolderName() ."</a>";
-                              $m2mSiteCode = $folder->getM2MCode();
-                              if(!empty($m2mSiteCode)){
-                                  $pathCol = $folder->getFolderName();   
-                              }
-						          echo $statusCol .$visibleCol.
-                                    "<td>" . $pathCol ."</td> 
-                                    <td>". $synchedOnStr ."</td>
-                                    <td>". $remindedOnStr ."</td>
-                                        
-	         
-						          </tr>";
-				  	        }
-				          ?>
-				        </table>
-                       </form>
-                 </td>
-                </tr>
-            </table>
+        <? include("leftButtons.php");?>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <?php echo($div)?>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Stations</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form method="post" role="form" name="folderForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal">
+                                <input type="hidden" name="locationSeq" id="locationSeq" value="<?echo $locationSeq?>" /> 
+                                 <input type="hidden" name="call" id="call" /> 
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Location</label>
+                                    <div class="col-sm-5">
+                                        <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","loadGrid(this.value)",$locationSeq,"All Locations")?>
+                                    </div>
+                                </div>
+                                <div id="jqxgrid"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </Div>
-    <DIV id="showUsersDialog">
-        <div id ="showUsersDialogData">
-        <div id="showFolders_loadingAjax" style="display: none;"/>
-           <img src='images/ajax.gif' />  
-        </div>
-        <Div class="msg"></div>
-
-        <Div class="UserDivs"></div>
-            <label id="folderSeqSelected" style="display:none"></label> 
-        </div>
-    </DIV>
+    </div>
     </body>
 </html>
+<?include("../_jqxGridInclude.php");?>
  <script language="javascript">
         var showFolders_FoldersJSON = null;
         var showFolders_UsersJSON = null;
         var showFolders_UserDivId = 0;
-        $(function(){
-            buildShowUsersDialog(true);
-            buildUsersJson();
-            //buildUsersFoldersJsons();
-        });  
+        $( document ).ready(function() {
+            loadGrid(0);
+        });
+        
+        function loadGrid(locationSeq){
+            var source =
+            {
+                datatype: "json",
+                pagesize: 20,
+                datafields: [
+                    { name: 'isenable', type: 'string' },
+                    { name: 'isonline', type: 'string' },
+                    { name: 'isvisible', type: 'string' },
+                    { name: 'foldername', type: 'string' },
+                    { name: 'lastsynchedon', type: 'date' },
+                    { name: 'lastremindedon', type: 'date' }
+                ],
+                url: 'showFolders.php?call=getFolders&locationSeq='+locationSeq,
+                root: 'Rows',
+                cache: false,
+                beforeprocessing: function(data)
+                {
+                    source.totalrecords = data.TotalRows;
+                },
+                filter: function()
+                {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+                },
+                sort: function()
+                {
+                        // update the grid and send a request to the server.
+                        $("#jqxgrid").jqxGrid('updatebounddata', 'sort');
+                },
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            
+            $("#jqxgrid").jqxGrid(
+            {
+                width: "100%",
+                source: dataAdapter,                
+                pageable: true,
+                autoheight: true,
+                showtoolbar: true,
+                sortable: true,
+                filterable: true,
+                columnsresize: true,
+                altrows: true,
+                enabletooltips: true,
+                altrows: true, 
+                theme: "energyblue",
+                virtualmode: true,
+                rendergridrows: function()
+                {
+                      return dataAdapter.records;     
+                },               
+                columns: [
+                  { text: 'Enabled',  datafield: 'isenable', width: "8%"},
+                  { text: 'Visible',  datafield: 'isvisible', width: "8%" },
+                  { text: 'Status',  datafield: 'isonline', width: "10%" },
+                  { text: 'Folder',  datafield: 'foldername', width: "34%" },
+                  { text: 'Last Synched', datafield: 'lastsynchedon', width: "20%",cellsformat: 'MM-dd-yyyy hh:mm:ss tt' },
+                  { text: 'Last Reminder',  datafield: 'lastremindedon',width: "20%",cellsformat: 'MM-dd-yyyy hh:mm:ss tt' },
+                ]
+            });
+        }  
         function changeStatus(seq,isEnabled){
             document.folderForm.action = "showFolders.php";                   
             document.getElementById('editSeq').value =  seq ;
@@ -161,11 +164,6 @@ $FDS = FolderDataStore::getInstance();
                 document.folderForm.submit();
             }
         }
-        function populateRows(locationSeq){
-            document.getElementById('locationSeq').value =  locationSeq;      
-            document.folderForm.action = "showFolders.php";
-            document.getElementById('formAction').value =  'populateRows' ; 
-            document.folderForm.submit();
-        }
+        
  </script>
 

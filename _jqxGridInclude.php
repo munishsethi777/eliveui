@@ -16,3 +16,9 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
 <script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.pager.js"></script> 
 <script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.selection.js"></script> 
 <script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.edit.js"></script> 
+<script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.edit.js"></script> 
+<script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.filter.js"></script>
+<script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.columnsreorder.js"></script>
+<script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.columnsresize.js"></script>
+<script type="text/javascript" src="<?echo $path?>jqwidgets/jqxdata.export.js"></script> 
+<script type="text/javascript" src="<?echo $path?>jqwidgets/jqxgrid.export.js"></script> 

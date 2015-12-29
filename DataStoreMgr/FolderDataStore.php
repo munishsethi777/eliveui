@@ -3,6 +3,7 @@
    require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/MainDB.php");
    require_once($ConstantsArray['dbServerUrl'] ."/BusinessObjects/Folder.php");
    require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/M2MSynchronizerDataStore.php");
+   require_once($ConstantsArray['dbServerUrl'] . "/Utils/FilterUtil.php");
 
 
 class FolderDataStore{
@@ -223,19 +224,68 @@ class FolderDataStore{
             }
          return $folderArray;
        }
+        
+       
        public function FindByLocation($locationSeq){
             $conn = self::$db->getConnection();
             $stmt = $conn->prepare(self::$FIND_ALL_BY_LOCATIONSEQ);
             $stmt->bindValue(':locationseq', $locationSeq);
             $stmt->execute();
             $folderArray = Array();
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $folderObj = new Folder();
                 $folderObj =  self::populateObject($row);
                 $folderArray[$folderObj->getSeq()] = $folderObj;
             }
          return $folderArray;
        }
+       private function getTotalCount($sql){
+        $conn = self::$db->getConnection();
+        $query = FilterUtil::applyFilter($sql,false);
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $count = $stmt->rowCount();
+        return $count;  
+     } 
+       public function FindJsonByLocationSeqs($locationSeqs){
+            $conn = self::$db->getConnection();
+            $FIND_BY_LOCATION_SEQS = "select * from folder where locationseq in($locationSeqs)";
+            $query = FilterUtil::applyFilter($FIND_BY_LOCATION_SEQS);
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $arr = array();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                 array_push($arr,$this->getJsonArray($row));    
+            }
+            $mainArr["Rows"] = $arr;
+            $mainArr["TotalRows"] = $this->getTotalCount($FIND_BY_LOCATION_SEQS);
+            return json_encode($mainArr);
+       }
+       
+       private function getJsonArray($row){
+            $array = array();
+            $array["seq"] = $row["seq"];
+            $array["foldername"] = $row["foldername"];
+            $statusCol = "<i class='fa fa-check-square-o'></i>";                  
+            if($row["isenable"] == "0"){
+               $statusCol = "<i class='fa fa-square-o'></i>";
+            }
+            $visibleCol = "<i  class='fa fa-eye'></i>";                  
+            if($row["isvisible"] == "0"){
+               $visibleCol = "<i class='fa fa-eye-slash'></i>";
+            }
+            $isOnlineCol = "<span class='label label-success'>Connected</span>";                  
+            if($row["isonline"] == "0"){
+               $isOnlineCol = "<span class='label label-danger'>Disconnected</span>";
+            }
+            $array["isenable"] = $statusCol;
+            $array["isonline"] = $isOnlineCol;
+            $array["isvisible"] = $visibleCol;
+            $array["lastsynchedon"] = $row["lastsynchedon"];
+            $array["lastremindedon"] = $row["lastremindedon"];
+            return $array;     
+       }
+       
        public function FindByLocationSeqs($locationSeqs){
             $conn = self::$db->getConnection();
             $FIND_BY_LOCATION_SEQS = "select * from folder where locationseq in($locationSeqs) order by locationseq ASC";
