@@ -48,14 +48,14 @@ if($call == "getFolders"){
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Stations</h5>
+                            <h5>Show Stations</h5>
                         </div>
                         <div class="ibox-content">
                             <form method="post" role="form" name="folderForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal">
                                 <input type="hidden" name="locationSeq" id="locationSeq" value="<?echo $locationSeq?>" /> 
                                  <input type="hidden" name="call" id="call" /> 
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Location</label>
+                                    <label class="col-sm-1 control-label">Location</label>
                                     <div class="col-sm-5">
                                         <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","loadGrid(this.value)",$locationSeq,"All Locations")?>
                                     </div>
