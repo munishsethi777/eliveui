@@ -118,7 +118,7 @@ if($call == "getFolders"){
                 source: dataAdapter,                
                 pageable: true,
                 autoheight: true,
-                showtoolbar: true,
+                showtoolbar: false,
                 sortable: true,
                 filterable: true,
                 columnsresize: true,
