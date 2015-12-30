@@ -14,7 +14,7 @@
      private static $SELECTALL = "select highvaluerule.*,folder.foldername,folder.industryname,folder.stationtype,folder.stationname,channelconfiguration.channelname from highvaluerule,folder,channelconfiguration where folder.seq = highvaluerule.folderseq" ;
      private static $FIND_BY_SEQ = "select * from highvaluerule where seq = :seq";
 
-     private static $FIND_BY_FOLDER = "select * from highvaluerule where folderseq=:folderseq";
+     private static $FIND_BY_FOLDER = "select * from highvaluerule where folderseq in (:folderseq)";
      private static $FIND_BY_LOCATIONSEQ = "select highvaluerule.*,channelconfiguration.channelname,channelconfiguration.channelstation, folder.foldername from highvaluerule,folder,channelconfiguration where folder.seq = channelconfiguration.folderseq and channelconfiguration.channelnumber = highvaluerule.parameterchannelno and folder.seq = highvaluerule.folderseq and highvaluerule.folderseq in(select seq from folder where folder.locationseq = :locSeq)";
      private static $HITRULE = "update highvaluerule set rulehits=rulehits+1 ,lastrulehitwqdfiledataseq = :wqdseq where seq = :seq";
 
@@ -127,6 +127,30 @@
                 $objArr[$obj->getSeq()] = $obj;
             }
            return $objArr;
+       }
+         private function getTotalCountByFolder($folderSeq){
+            $conn = self::$db->getConnection();
+            $query = FilterUtil::applyFilter(self::$FIND_BY_FOLDER,false);
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':folderseq', $folderSeq);
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            return $count;  
+          } 
+        public function FindArrByFolder($folderSeq){
+            $conn = self::$db->getConnection();
+            $query = FilterUtil::applyFilter(self::$FIND_BY_FOLDER);
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':folderseq', $folderSeq);
+            $stmt->execute();
+            $error = $stmt->errorInfo();
+            $objArr = Array();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($objArr,$row);
+            }
+            $mainArr["Rows"] = $objArr;
+            $mainArr["TotalRows"] = $this->getTotalCountByFolder($folderSeq);
+            return $mainArr; 
        }
 
         public function FindAll(){
