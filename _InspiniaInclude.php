@@ -28,7 +28,7 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
 
     
     <script language="javascript">
-        function showNotification($msg){
+        function showNotification($msg,status){
             toastr.options = {
                   "closeButton": true,
                   "debug": false,
@@ -44,6 +44,11 @@ $path=$protocol.getenv('HTTP_HOST')."/eliveui/";?>
                   "showMethod": "fadeIn",
                   "hideMethod": "fadeOut"
             }
-            toastr.error($msg);
+            if(status == "success"){
+                 toastr.success($msg); 
+            }else{
+                 toastr.error($msg);    
+            }
+           
         }
     </script>
