@@ -2,6 +2,7 @@
   require_once($ConstantsArray['dbServerUrl'] ."DataStoreMgr/MainDB.php");
   require_once($ConstantsArray['dbServerUrl'] ."BusinessObjects/User.php");
   require_once($ConstantsArray['dbServerUrl'] . "SecurityUtil/SecurityUtil.php");
+  require_once($ConstantsArray['dbServerUrl'] . "Utils/FilterUtil.php");
 
 
   class UserDataStore{
@@ -266,7 +267,32 @@
             }
             return $userArray;
          }
-
+          private function getTotalCount($sql){
+            $conn = self::$db->getConnection();
+            $query = FilterUtil::applyFilter($sql,false);
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            return $count;  
+          } 
+         public function FindAllUsersArr($locSeq){
+            $conn = self::$db_New->getConnection();
+            if($locSeq != null && $locSeq >0){
+                self::$SELECTALLUSERS .= " and locationseq in (".$locSeq.")";
+            }
+            $query = FilterUtil::applyFilter(self::$SELECTALLUSERS);
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $userArray = Array();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($userArray,$row);
+            }
+            $mainArr["Rows"] = $userArray;
+            $mainArr["TotalRows"] = $this->getTotalCount(self::$SELECTALLUSERS);
+            return $mainArr;
+            
+         }
+         
          public function FindUsersByLocSeqs($locSeqs){
             $conn = self::$db_New->getConnection();
             $SQL = "select * from user where locationseq in ($locSeqs) order by locationseq";

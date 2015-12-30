@@ -271,7 +271,7 @@ function checkChNoUniqueValidation(){
                             delSeq: seq,
                         },
                         complete: function () {
-                            //window.location.reload(true);
+                            $("#jqxgrid").jqxGrid('updatebounddata');
                         }
                     });  
                  }

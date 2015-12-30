@@ -1,4 +1,5 @@
-<?
+<?session_start();
+$managerSession = $_SESSION["managerSession"]; 
 require_once('IConstants.inc'); 
 require_once($ConstantsArray['dbServerUrl'] . "FormValidator//validator.php");
 require($ConstantsArray['dbServerUrl'] . "DataStoreMgr//UserDataStore.php");
@@ -7,13 +8,32 @@ require_once($ConstantsArray['dbServerUrl'] . "Utils/DropDownUtils.php");
 require($ConstantsArray['dbServerUrl'] . "Utils//StringUtils.php"); 
 $msg = "";
 $UDS = UserDataStore::getInstance();
-$LDS = LocationDataStore::getInstance(); 
-$locationSeq = $_POST["locationSeq"]; 
-if ($_POST["formAction"] == "delete" ){
+$LDS = LocationDataStore::getInstance();
+$seq = $managerSession['seq']; 
+$locationSeq = $_GET["locationSeq"]; 
+if ($_POST["call"] == "delete" ){
     $UDS->deleteBySeq($_POST['editSeq']);
     $msg = StringUtils::getMessage("Location","User deleted successfully",false);   
 }
-
+    
+    $call = $_GET["call"];
+    if($call == "getUsers"){
+        if(!empty($locationSeq)){
+            $Users = $UDS->FindAllUsersArr($locationSeq);    
+        }else{
+            $locationSeqs = $LDS->FindLocationsByUser($seq);
+            $lseq = $managerSession['locSeq'];
+            if(!in_array($lseq,$locationSeqs)){
+                array_push($locationSeqs,$lseq);    
+            }
+            $Users = $UDS->FindAllUsersArr(implode(",",$locationSeqs)); 
+        } 
+        $userJson = json_encode($Users);
+        echo $userJson;
+        return;
+    }
+     
+    
 ?>   
 <!DOCTYPE html>
 <html>
@@ -22,121 +42,149 @@ if ($_POST["formAction"] == "delete" ){
         <?include("../_InspiniaInclude.php");?>   
     </head>
     <body>
-    <?$seq = $managerSession['seq'];
-    if(!empty($locationSeq)){
-        $Users = $UDS->FindAllUsers($locationSeq);    
-    }else{
-        $locationSeqs = $LDS->FindLocationsByUser($seq);
-        $lseq = $managerSession['locSeq'];
-        if(!in_array($lseq,$locationSeqs)){
-            array_push($locationSeqs,$lseq);    
-        }
-        $Users = $UDS->FindAllUsers(implode(",",$locationSeqs)); 
-    }  
-    ?>
-  
+    
     <div id="wrapper"> 
          <? include("leftButtons.php");?> 
-          <div id="page-wrapper" class="gray-bg">    
-            <table width="80%" border="0">
-             <tr>       
-                <td style="padding:10px 10px 10px 10px;"><?php echo($msg) ?></td>
-           </tr>
-            <tr>
-                <td>
-                    Select Location :
-                    <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","populateRows(this.value)",$locationSeq,"All") ?>
-                 </td> 
-                </tr>
-          <tr>
-            <td class="ui-widget-header" style="padding:10px 10px 10px 10px;">List of Available Users</td>
-            </tr>
-          <tr>
-            <td class="ui-widget-content" style="">
-            
-             <form name="userForm" method="post" action="" >
-                   <input type="hidden" name="editSeq" id="editSeq" />
-                   <input type="hidden" name="formAction" id="formAction" />                
-                   <input type="hidden" name="locationSeq" id="locationSeq" value="<?echo $locationSeq?>" />   
-                    <table width="100%" border="1" bordercolor="silver" style="border-style:dashed;border-width:thin;border:thin;border-color:#CCCCCC">
-                      <tr>
-                        <td width="20%" class="ui-widget-header">User Name</td>
-                        <td width="20%" class="ui-widget-header">Password</td>
-                        <td width="35%" class="ui-widget-header">Email Id</td>
-                        <td width="5%" class="ui-widget-header">Active</td>
-                        <td align="center" width="10%" class="ui-widget-header">Action</td>
-                      </tr>
-                      <? foreach($Users as $user){
-                             $isActive = "Off";
-                             $title = "Assign Premission to user (" . $user->getUserName() . ")" ; 
-                             if($user->getIsActive() == "1"){
-                                     $isActive = "On";      
-                              }
-                              echo "<tr>
-                                <td>". $user->getUserName() ."</td>
-                                <td>". SecurityUtil::Decode($user->getPassword())."</td>
-                                <td>". $user->getEmailId() ."</td>
-                                <td>". $isActive  ."</td> 
-                                <td align='center'>
-                                   <a href='javascript:Edit(". $user->getSeq() . ")' title='Edit'>
-                                    <img src='images/edit.png' border='0'/>
-                                   </a>
-                                   <a href='javascript:Delete(". $user->getSeq() . ")' title='Delete'>
-                                    <img src='images/delete.png'  border='0'/> 
-                                   </a>
-                                     </a>
-                                     <!--<a href='javascript:showUsers(".  $user->getSeq() . "," . '"' . $title . '"' . ");' title='Permissions'><img src='images/users.png' border=0/></a>-->
-                                </td>
-                              </tr>";
-                          }
-                      ?>
-                    </table>
-                 </form>
-             </td>
-            </tr>
-        </table>
-          </div> 
-    </div>
-
-    <DIV id="showUsersDialog">
-        <div id ="showUsersDialogData">
-            <div id="showFolders_loadingAjax" style="display: none;">
-               <img src='images/ajax.gif' />  
+          <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Show Users</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form method="post" role="form" name="userForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal">
+                                <input type="hidden" name="locationSeq" id="locationSeq" value="<?echo $locationSeq?>" /> 
+                                <input type="hidden" name="editSeq" id="editSeq"/> 
+                                <input type="hidden" name="call" id="call" /> 
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label">Location</label>
+                                    <div class="col-sm-5">
+                                        <? echo DropDownUtils::getUserLocationsDropDown($seq,"l_DropDown","loadGrid(this.value)",$locationSeq,"All Locations")?>
+                                    </div>
+                                </div>
+                                <div id="jqxgrid"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <Div class="msg"></div>  
-            <Div class="UserDivs"></div>
-            <label id="folderSeqSelected" style="display:none"></label>
         </div>
-    </DIV>
+    </div>
     </body>
 </html>
-
+<?include("../_jqxGridInclude.php");?>
 <script language="javascript">
     var showFolders_FoldersJSON = null;
     var showFolders_UsersJSON = null;
     var showFolders_UserDivId = 0;
-    $(function(){
-        buildShowUsersDialog(false);
-        buildFoldersJson();
+    $( document ).ready(function() {
+            loadGrid(0);
     });
+        
+    function loadGrid(locationSeq){
+        var source =
+        {
+            datatype: "json",
+            pagesize: 20,
+            datafields: [
+                { name: 'seq', type: 'integer' },
+                { name: 'username', type: 'string' },
+                { name: 'password', type: 'string' },
+                { name: 'emailid', type: 'string' },
+                { name: 'isactive', type: 'string' },
+                { name: 'actions', type: 'string' },
+            ],
+            url: 'showUsers.php?call=getUsers&locationSeq='+locationSeq,
+            root: 'Rows',
+            cache: false,
+            beforeprocessing: function(data)
+            {
+                source.totalrecords = data.TotalRows;
+            },
+            filter: function()
+            {
+                // update the grid and send a request to the server.
+                $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+            },
+            sort: function()
+            {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'sort');
+            },
+        };
+        var cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                if (value == 1) {
+                    return '<div style="text-align: center; margin-top: 5px;"><i class="fa fa-check-square-o" title="Active"></i></div>';
+                }
+                else {
+                    return '<div style="text-align: center; margin-top: 5px;"><i class="fa fa-square-o" title="InActive"></i></div>';
+                }
+        }
+        var columnrenderer = function (value) {
+                return '<div style="text-align: center; margin-top: 5px;">' + value + '</div>';       
+        }
+        var actions = function (row, columnfield, value, defaulthtml, columnproperties) {
+                data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                var html = "<div style='text-align: center; margin-top: 5px;'><a href='javascript:Edit("+ data['seq'] + ")' ><i class='fa fa-pencil-square-o' title='Edit'></i></a>";
+                    html += "<span style='margin-left:5px;'><a href='javascript:Delete("+ data['seq'] + ")' ><i class='fa fa-times' title='Delete'></i></a></span></div>";
+                
+                return html;
+        }
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        
+        $("#jqxgrid").jqxGrid(
+        {
+            width: "100%",
+            source: dataAdapter,                
+            pageable: true,
+            autoheight: true,
+            showtoolbar: false,
+            sortable: true,
+            filterable: true,
+            columnsresize: true,
+            altrows: true,
+            enabletooltips: true,
+            altrows: true, 
+            theme: "energyblue",
+            virtualmode: true,
+            rendergridrows: function()
+            {
+                  return dataAdapter.records;     
+            },               
+            columns: [
+              { text: 'Active',  datafield: 'isactive', width: "8%",renderer:columnrenderer,cellsrenderer: cellsrenderer},  
+              { text: 'id', datafield: 'seq' , hidden:true},
+              { text: 'User Name',  datafield: 'username', width: "28%"},
+              { text: 'Password',  datafield: 'password', width: "24%" },
+              { text: 'Email',  datafield: 'emailid', width: "30%" },
+              { text: 'Actions',  datafield: 'action', width: "10%", renderer:columnrenderer,cellsrenderer:actions}
+            ]
+        });
+    }  
     function Edit(seq){ 
         document.userForm.action = "CreateUserForm.php";                   
         document.getElementById('editSeq').value =  seq ;
         document.userForm.submit();
     }
     function Delete(seq){ 
-        var r=confirm("Are you realy want to delete this user");
-        if(r == true){ 
-            document.userForm.action = "showUsers.php";                   
-            document.getElementById('editSeq').value =  seq ;
-            document.getElementById('formAction').value =  'delete' ; 
-            document.userForm.submit();
-        }
-    }
-    function populateRows(locationSeq){
-            document.getElementById('locationSeq').value =  locationSeq;      
-            document.userForm.action = "showUsers.php";
-            document.getElementById('formAction').value =  'populateRows' ; 
-            document.userForm.submit();
+         bootbox.confirm("Are you sure?", function(result){ 
+            if(result){
+                 if(seq > 0){
+                    $.ajax({
+                        type: 'POST',
+                        url: "showUsers.php",
+                        data: {
+                            call: "delete",
+                            editSeq: seq,
+                        },
+                        complete: function () {
+                           $("#jqxgrid").jqxGrid('updatebounddata');
+                          showNotification("Deleted Successfully","success");
+                        }
+                    });  
+                 }
+             } 
+    });
     }
 </script>
