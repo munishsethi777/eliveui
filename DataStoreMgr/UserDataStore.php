@@ -15,6 +15,8 @@
     private static $SELECTALLMANAGERS = "select user.*,location.name as locationName from user,location where user.ismanager = 1 and user.locationseq = location.seq" ;
     private static $SELECTALLMANAGERSBYLOCATION = "select user.*,location.name as locationName from user,location where user.ismanager = 1 and user.locationseq = location.seq and location.seq = :locSeq" ;
     private static $SELECTALLUSERS = "select * from user where ismanager = 0" ;
+    private static $SELECT_ALL_USERS_LOCATION_USERS = "select DISTINCT user.seq,user.* from user inner join locationusers lu on user.seq = lu.userseq where user.ismanager = 0" ;
+    
     private static $SELECT_MANAGER_USERNAME_PASSWORD = "select * from user where ismanager = 1 and username=:username and password=:password" ;
     private static $FIND_BY_SEQ = "select * from user where seq = :seq";
     private Static $INSERT = "INSERT INTO `user` (fullname,username,password,emailid,dateofregistration,isactive,locationseq,folderseq,ismanager) VALUES(:fullname, :username, :password, :emailid, :dateofregistration, :isactive, :locationseq, :folderseq, :ismanager)";
@@ -278,9 +280,9 @@
          public function FindAllUsersArr($locSeq){
             $conn = self::$db_New->getConnection();
             if($locSeq != null && $locSeq >0){
-                self::$SELECTALLUSERS .= " and locationseq in (".$locSeq.")";
+                self::$SELECT_ALL_USERS_LOCATION_USERS .= " and lu.locationseq in (".$locSeq.")";
             }
-            $query = FilterUtil::applyFilter(self::$SELECTALLUSERS);
+            $query = FilterUtil::applyFilter(self::$SELECT_ALL_USERS_LOCATION_USERS);
             $stmt = $conn->prepare($query);
             $stmt->execute();
             $userArray = Array();
@@ -288,7 +290,7 @@
                 array_push($userArray,$row);
             }
             $mainArr["Rows"] = $userArray;
-            $mainArr["TotalRows"] = $this->getTotalCount(self::$SELECTALLUSERS);
+            $mainArr["TotalRows"] = $this->getTotalCount(self::$SELECT_ALL_USERS_LOCATION_USERS);
             return $mainArr;
             
          }
