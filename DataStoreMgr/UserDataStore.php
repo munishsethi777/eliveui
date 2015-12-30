@@ -11,7 +11,7 @@
     private static $db;
     private static $db_New;
     private static $SELECTALL = "select * from user" ;
-     private static $FIND_LOCATION_USERS = "select * from locationusers where userseq= :userseq" ;
+    private static $FIND_LOCATION_USERS = "select * from locationusers where userseq= :userseq" ;
     private static $SELECTALLMANAGERS = "select user.*,location.name as locationName from user,location where user.ismanager = 1 and user.locationseq = location.seq" ;
     private static $SELECTALLMANAGERSBYLOCATION = "select user.*,location.name as locationName from user,location where user.ismanager = 1 and user.locationseq = location.seq and location.seq = :locSeq" ;
     private static $SELECTALLUSERS = "select * from user where ismanager = 0" ;
@@ -287,6 +287,10 @@
             $stmt->execute();
             $userArray = Array();
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $locationNames = $this->getLocationNamesByUser($row["seq"]);
+                if(count(explode(",",$locSeq)) > 1){
+                     $row["username"] .= " (" . implode(", ",$locationNames) . ")";    
+                }               
                 array_push($userArray,$row);
             }
             $mainArr["Rows"] = $userArray;
@@ -419,6 +423,21 @@
                 }
                 return $locationSeqs;    
           }
+         private static $FIND_LOCATION_NAMES = "select l.* from locationusers lu inner join location l on lu.locationseq = l.seq where lu.userseq = :userseq ";
+         
+         private function getLocationNamesByUser($userSeq){
+                $conn = self::$db_New->getConnection();
+                $stmt = $conn->prepare(self::$FIND_LOCATION_NAMES);
+                $stmt->bindValue(':userseq', $userSeq);
+                $stmt->execute();
+                $$locationNames = array();
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $locationName =  $row["name"];
+                    array_push($$locationNames,$locationName);
+                }
+                return $$locationNames;    
+          }
+          
           public function getAllFolderSeqs($userSeq){
              $conn = self::$db_New->getConnection();
              $stmt = $conn->prepare(self::$GET_ALL_FOLDERS);
