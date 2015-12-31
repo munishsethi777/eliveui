@@ -27,7 +27,7 @@ class FolderDataStore{
 
      private static $FIND_ALL_BY_LOCATION = "select * from folder  left JOIN folderuser ON  folder.seq = folderuser.folderseq where folder.locationseq = :locationseq and folderuser.userseq = :userseq";
 
-     private static $FIND_ALL_BY_LOCATIONSEQ = "SELECT folder.*, location.name as locationname,location.locationfolder as locationfolder from folder, location where folder.locationseq = location.seq and folder.locationseq = :locationseq";
+     private static $FIND_ALL_BY_LOCATIONSEQ = "SELECT folder.*, location.name as locationname,location.locationfolder as locationfolder from folder, location where folder.locationseq = location.seq ";
 
      private static $UPDATE_LAST_SYNCHDATE = "update folder set lastsynchedon = now() where seq = :seq";
      private static $UPDATE_LAST_SYNCEDON = "update folder set lastsynchedon = :lastsynchedon where seq = :seq";
@@ -228,10 +228,12 @@ class FolderDataStore{
        
        public function FindByLocation($locationSeq){
             $conn = self::$db->getConnection();
-            $stmt = $conn->prepare(self::$FIND_ALL_BY_LOCATIONSEQ);
-            $stmt->bindValue(':locationseq', $locationSeq);
+            $query = self::$FIND_ALL_BY_LOCATIONSEQ . " and folder.locationseq in ($locationSeq)";
+            $stmt = $conn->prepare($query);
+            //$stmt->bindValue(':locationseq', $locationSeq);
             $stmt->execute();
             $folderArray = Array();
+            //$count = $stmt->fetchAll();
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $folderObj = new Folder();
                 $folderObj =  self::populateObject($row);
@@ -274,7 +276,7 @@ class FolderDataStore{
             if($row["isvisible"] == "0"){
                $visibleCol = "<i class='fa fa-eye-slash'></i>";
             }
-            $isOnlineCol = "<span class='label label-success'>Connected</span>";                  
+            $isOnlineCol = "<span class='label label-success'>Connected". str_repeat('&nbsp;', 5)   ."</span>";                  
             if($row["isonline"] == "0"){
                $isOnlineCol = "<span class='label label-danger'>Disconnected</span>";
             }

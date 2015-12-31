@@ -3,13 +3,19 @@
   require_once('IConstants.inc');
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//HighValueRuleDataStore.php");
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//FolderDataStore.php");
+  require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//LocationDataStore.php");
   require_once($ConstantsArray['dbServerUrl'] . "Utils/DropDownUtils.php"); 
   require($ConstantsArray['dbServerUrl'] . "Utils//StringUtils.php");
   $msg = "";
   $HVRDS = HighValueRuleDataStore::getInstance();
   $FDS = FolderDataStore::getInstance();
+  $LDS = LocationDataStore::getInstance();
   $locSeq = $managerSession['locSeq'];
-  $folders = $FDS->FindByLocation($locSeq);
+  $locationSeqs = $LDS->FindLocationsByUser($managerSession["seq"]);
+    if(!in_array($locSeq,$locationSeqs)){
+        array_push($locationSeqs,$locSeq);    
+    }
+$folders = $FDS->FindByLocation(implode(",",$locationSeqs));
   $folderSeq = $_GET["folderseq"];
   if ($_POST["formAction"] <> "" && $_POST["formAction"] == "delete"){
     $HVRDS->deleteBySeq($_POST['editSeq']);
@@ -103,7 +109,7 @@
                 { name: 'frequency', type: 'string' },
                 { name: 'actions', type: 'string' },
             ],
-            url: 'showHighValueRules1.php?call=getRules&folderseq='+folderseq,
+            url: 'showHighValueRules.php?call=getRules&folderseq='+folderseq,
             root: 'Rows',
             cache: false,
             beforeprocessing: function(data)

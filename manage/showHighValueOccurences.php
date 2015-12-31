@@ -2,6 +2,7 @@
   require_once('IConstants.inc');
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//HighValueRuleReminderDataStore.php");
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//FolderDataStore.php");
+    require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//LocationDataStore.php");
   require($ConstantsArray['dbServerUrl'] . "Utils//StringUtils.php");
   require($ConstantsArray['dbServerUrl'] . "Utils//ExportUtils.php");
   require_once($ConstantsArray['dbServerUrl'] . "Utils/DropDownUtils.php");
@@ -9,8 +10,13 @@
 Session_start();
 $managerSession = $_SESSION["managerSession"];
 $locSeq = $managerSession['locSeq'];
+$LDS = LocationDataStore::getInstance();
 $FDS = FolderDataStore::getInstance();
-$folders = $FDS->FindByLocation($locSeq);
+$locationSeqs = $LDS->FindLocationsByUser($managerSession["seq"]);
+if(!in_array($locSeq,$locationSeqs)){
+    array_push($locationSeqs,$locSeq);    
+}
+$folders = $FDS->FindByLocation(implode(",",$locationSeqs));
 
 $HVRRDS = HighValueRuleReminderDataStore::getInstance();
 $isError = false;

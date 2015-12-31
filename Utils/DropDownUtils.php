@@ -69,8 +69,8 @@
                 if(empty($name)){
                     $name =  $folderObj->getFolderName();   
                 }
-                $select = $selectedValue == $folderObj->getSeq() ? 'selected' : null;  
-                $str .= "<option value='" . $folderObj->getSeq() . "'" . $select . ">" . $name . "</option>";                               
+                $select = $selectedValue == $folderObj->getSeq() ? 'selected' : null; 
+                $str .= "<option value='" . $folderObj->getSeq() . "'" . $select . ">" . $folderObj->getLocation(). " : ".$name . "</option>";            
             } 
         }
         $str .= "</select>";

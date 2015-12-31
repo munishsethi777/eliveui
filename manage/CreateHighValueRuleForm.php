@@ -3,6 +3,7 @@
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//HighValueRuleDataStore.php");
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//ChannelConfigurationDataStore.php");
   require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//FolderDataStore.php");
+    require_once($ConstantsArray['dbServerUrl'] . "DataStoreMgr//LocationDataStore.php");
   require_once($ConstantsArray['dbServerUrl'] . "FormValidator//validator.php");
   require_once($ConstantsArray['dbServerUrl'] . "Utils/DropDownUtils.php");
     
@@ -92,8 +93,14 @@
             <? include("leftButtons.php");
                   $locSeq = $managerSession['locSeq'];
                   $FDS = FolderDataStore::getInstance();
+                  $LDS = LocationDataStore::getInstance();
                   $CCDS = ChannelConfigurationDataStore::getInstance();
-                  $folders = $FDS->FindByLocation($locSeq);
+                  $locationSeqs = $LDS->FindLocationsByUser($managerSession["seq"]);
+                    if(!in_array($locSeq,$locationSeqs)){
+                        array_push($locationSeqs,$locSeq);    
+                    }
+                    $folders = $FDS->FindByLocation(implode(",",$locationSeqs));
+                  
                   $folDDown = DropDownUtils::getFoldersDropDownWithStationName($folders,"folder","changeStation()",$highValueRule->getFolderSeq());
                   $chDDown = "Select a Station to load Parameters";
                   if($highValueRule->getParameter() != null){

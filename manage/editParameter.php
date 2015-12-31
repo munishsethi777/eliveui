@@ -7,6 +7,7 @@ require_once($ConstantsArray['dbServerUrl'] . "FormValidator//validator.php");
 require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/UserDataStore.php");
 require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/FolderDataStore.php");
 require_once($ConstantsArray['dbServerUrl'] . "/Utils/DropDownUtils.php");
+require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/LocationDataStore.php");
 require_once($ConstantsArray['dbServerUrl'] . "/BusinessObjects/Folder.php");
 require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/ChannelConfigurationDataStore.php");
 require_once($ConstantsArray['dbServerUrl'] . "/DataStoreMgr/WQDStackDataStore.php");
@@ -20,9 +21,14 @@ $userSeq =  $managerSession['seq'];
 $locSeq = $managerSession['locSeq'];
 $FDS = FolderDataStore::getInstance();
 $CDS = ChannelConfigurationDataStore::getInstance();
+$LDS = LocationDataStore::getInstance();
 $WSDS = WQDStackDataStore::getInstance();
 $WFDS = WQDFileDataStore::getInstance();
-$folders = $FDS->FindByLocation($locSeq);
+$locationSeqs = $LDS->FindLocationsByUser($userSeq);
+if(!in_array($locSeq,$locationSeqs)){
+    array_push($locationSeqs,$locSeq);    
+}
+$folders = $FDS->FindByLocation(implode(",",$locationSeqs));
 $isdataExist = false;
 $folder = new Folder();
 $channlConfigs = array();
@@ -180,7 +186,7 @@ function checkChNoUniqueValidation(){
                                 <input type="hidden" name="selectedFolderSeq" value="<?echo$selSeq?>" >
                                 <input type="hidden" name="delSeq" id = "delSeq">
                                 <?if(empty($channlConfigs)){?>
-                                    <span class="label label-info">Select Staion for populate parametes</span>
+                                        <span class="label label-info">Select Staion for populate parametes</span>
                                 <?}else{?>
                                 <table id="chTable" class="table">
                                     
